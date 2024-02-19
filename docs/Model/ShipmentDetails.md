@@ -1,0 +1,10 @@
+# # ShipmentDetails
+
+## Properties
+
+Name | Type | Description | Notes
+------------ | ------------- | ------------- | -------------
+**dim** | [**\Dhl\Rest\Shipping\Model\Dimensions**](Dimensions.md) |  | [optional]
+**weight** | [**\Dhl\Rest\Shipping\Model\Weight**](Weight.md) |  |
+
+[[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)
