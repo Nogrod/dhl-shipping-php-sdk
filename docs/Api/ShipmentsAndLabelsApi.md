@@ -27,6 +27,9 @@ This request is used to create one or more shipments and return corresponding sh
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure OAuth2 access token for authorization: OAuth2
+$config = Dhl\Rest\Shipping\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
 // Configure API key authorization: ApiKey
 $config = Dhl\Rest\Shipping\Configuration::getDefaultConfiguration()->setApiKey('dhl-api-key', 'YOUR_API_KEY');
 // Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
@@ -44,7 +47,7 @@ $apiInstance = new Dhl\Rest\Shipping\Api\ShipmentsAndLabelsApi(
     new GuzzleHttp\Client(),
     $config
 );
-$shipment_order_request = new \Dhl\Rest\Shipping\Model\ShipmentOrderRequest(); // \Dhl\Rest\Shipping\Model\ShipmentOrderRequest
+$shipment_order_request = new \Dhl\Rest\Shipping\Model\ShipmentOrderRequest(); // \Dhl\Rest\Shipping\Model\ShipmentOrderRequest | Shipment order request.
 $accept_language = de-DE; // string | Control the APIs response language via locale abbreviation. English (en-US) and german (de-DE) are supported. If not specified, the default is english.
 $validate = false; // bool | If provided and set to `true`, the input document will be:   * validated against JSON schema (/orders/ endpoint) at the API layer. In case of errors, HTTP 400 and details will be returned.   * validated against the DHL backend.   In that case, no state changes are happening, no data is stored, shipments neither deleted nor created, no labels being returned. The call will return a status (200, 400) for each shipment element.
 $must_encode = false; // bool | Legacy name **printOnlyIfCodable**. If set to *true*, labels will only be created if an address is encodable. This is only relevant for German consignee addresses. If set to false or left out, addresses, that are not encodable will be printed even though you receive a warning.
@@ -66,7 +69,7 @@ try {
 
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
-| **shipment_order_request** | [**\Dhl\Rest\Shipping\Model\ShipmentOrderRequest**](../Model/ShipmentOrderRequest.md)|  | |
+| **shipment_order_request** | [**\Dhl\Rest\Shipping\Model\ShipmentOrderRequest**](../Model/ShipmentOrderRequest.md)| Shipment order request. | |
 | **accept_language** | **string**| Control the APIs response language via locale abbreviation. English (en-US) and german (de-DE) are supported. If not specified, the default is english. | [optional] |
 | **validate** | **bool**| If provided and set to &#x60;true&#x60;, the input document will be:   * validated against JSON schema (/orders/ endpoint) at the API layer. In case of errors, HTTP 400 and details will be returned.   * validated against the DHL backend.   In that case, no state changes are happening, no data is stored, shipments neither deleted nor created, no labels being returned. The call will return a status (200, 400) for each shipment element. | [optional] [default to false] |
 | **must_encode** | **bool**| Legacy name **printOnlyIfCodable**. If set to *true*, labels will only be created if an address is encodable. This is only relevant for German consignee addresses. If set to false or left out, addresses, that are not encodable will be printed even though you receive a warning. | [optional] [default to false] |
@@ -82,7 +85,7 @@ try {
 
 ### Authorization
 
-[ApiKey](../../README.md#ApiKey), [BasicAuth](../../README.md#BasicAuth)
+[OAuth2](../../README.md#OAuth2), [ApiKey](../../README.md#ApiKey), [BasicAuth](../../README.md#BasicAuth)
 
 ### HTTP request headers
 
@@ -110,11 +113,25 @@ Public download URL for shipment labels and documents. The URL is provided in th
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
+// Configure OAuth2 access token for authorization: OAuth2
+$config = Dhl\Rest\Shipping\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
+
+// Configure API key authorization: ApiKey
+$config = Dhl\Rest\Shipping\Configuration::getDefaultConfiguration()->setApiKey('dhl-api-key', 'YOUR_API_KEY');
+// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
+// $config = Dhl\Rest\Shipping\Configuration::getDefaultConfiguration()->setApiKeyPrefix('dhl-api-key', 'Bearer');
+
+// Configure HTTP basic authorization: BasicAuth
+$config = Dhl\Rest\Shipping\Configuration::getDefaultConfiguration()
+              ->setUsername('YOUR_USERNAME')
+              ->setPassword('YOUR_PASSWORD');
+
 
 $apiInstance = new Dhl\Rest\Shipping\Api\ShipmentsAndLabelsApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
-    new GuzzleHttp\Client()
+    new GuzzleHttp\Client(),
+    $config
 );
 $token = 'token_example'; // string | Identifies PDF document and requested print settings for download.
 
@@ -138,7 +155,7 @@ try {
 
 ### Authorization
 
-No authorization required
+[OAuth2](../../README.md#OAuth2), [ApiKey](../../README.md#ApiKey), [BasicAuth](../../README.md#BasicAuth)
 
 ### HTTP request headers
 
@@ -165,6 +182,9 @@ Returns documents for existing shipment(s). The call accepts multiple shipment n
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure OAuth2 access token for authorization: OAuth2
+$config = Dhl\Rest\Shipping\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 // Configure API key authorization: ApiKey
 $config = Dhl\Rest\Shipping\Configuration::getDefaultConfiguration()->setApiKey('dhl-api-key', 'YOUR_API_KEY');
@@ -217,7 +237,7 @@ try {
 
 ### Authorization
 
-[ApiKey](../../README.md#ApiKey), [BasicAuth](../../README.md#BasicAuth)
+[OAuth2](../../README.md#OAuth2), [ApiKey](../../README.md#ApiKey), [BasicAuth](../../README.md#BasicAuth)
 
 ### HTTP request headers
 
@@ -244,6 +264,9 @@ Delete one or more shipments created earlier. Deletion of shipments is only poss
 <?php
 require_once(__DIR__ . '/vendor/autoload.php');
 
+
+// Configure OAuth2 access token for authorization: OAuth2
+$config = Dhl\Rest\Shipping\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
 
 // Configure API key authorization: ApiKey
 $config = Dhl\Rest\Shipping\Configuration::getDefaultConfiguration()->setApiKey('dhl-api-key', 'YOUR_API_KEY');
@@ -288,7 +311,7 @@ try {
 
 ### Authorization
 
-[ApiKey](../../README.md#ApiKey), [BasicAuth](../../README.md#BasicAuth)
+[OAuth2](../../README.md#OAuth2), [ApiKey](../../README.md#ApiKey), [BasicAuth](../../README.md#BasicAuth)
 
 ### HTTP request headers
 

@@ -44,10 +44,10 @@ docs/Model/Value.md
 docs/Model/Weight.md
 git_push.sh
 phpunit.xml.dist
-src/ApiException.php
 src/Api/GeneralApi.php
 src/Api/ManifestsApi.php
 src/Api/ShipmentsAndLabelsApi.php
+src/ApiException.php
 src/Configuration.php
 src/HeaderSelector.php
 src/Model/BankAccount.php
