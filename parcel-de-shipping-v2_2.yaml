@@ -1312,11 +1312,6 @@ components:
     Shipper:
       type: object
       description: Shipper information, including contact information and address.
-      required:
-        - addressStreet
-        - city
-        - country
-        - name1
       properties:
         name1:
           maxLength: 50
@@ -1378,8 +1373,6 @@ components:
     ShipperReference:
       type: object
       description: Contains a reference to the Shipper data configured in GKP(GeschÃ¤ftskundenportal - Business Costumer Portal). Can be used instead of a detailed shipper address. The shipper reference can be used to print a company logo which is configured in GKP onto the label.
-      required:
-        - shipperRef
       properties:
         shipperRef:
           maxLength: 50

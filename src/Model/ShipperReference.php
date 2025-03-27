@@ -273,14 +273,11 @@ class ShipperReference implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['shipper_ref'] === null) {
-            $invalidProperties[] = "'shipper_ref' can't be null";
-        }
-        if ((mb_strlen($this->container['shipper_ref']) > 50)) {
+        if (!is_null($this->container['shipper_ref']) && (mb_strlen($this->container['shipper_ref']) > 50)) {
             $invalidProperties[] = "invalid value for 'shipper_ref', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['shipper_ref']) < 0)) {
+        if (!is_null($this->container['shipper_ref']) && (mb_strlen($this->container['shipper_ref']) < 0)) {
             $invalidProperties[] = "invalid value for 'shipper_ref', the character length must be bigger than or equal to 0.";
         }
 
@@ -302,9 +299,9 @@ class ShipperReference implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets shipper_ref
      *
-     * @return string
+     * @return string|null
      */
-    public function getShipperRef(): string
+    public function getShipperRef(): ?string
     {
         return $this->container['shipper_ref'];
     }
@@ -312,11 +309,11 @@ class ShipperReference implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets shipper_ref
      *
-     * @param string $shipper_ref Reference string to the shipper data configured in GKP(GeschÃ¤ftskundenportal - Business Costumer Portal).
+     * @param string|null $shipper_ref Reference string to the shipper data configured in GKP(GeschÃ¤ftskundenportal - Business Costumer Portal).
      *
      * @return $this
      */
-    public function setShipperRef(string $shipper_ref): static
+    public function setShipperRef(?string $shipper_ref): static
     {
         if (is_null($shipper_ref)) {
             throw new InvalidArgumentException('non-nullable shipper_ref cannot be null');

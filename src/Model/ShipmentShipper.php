@@ -343,14 +343,11 @@ class ShipmentShipper implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['name1'] === null) {
-            $invalidProperties[] = "'name1' can't be null";
-        }
-        if ((mb_strlen($this->container['name1']) > 50)) {
+        if (!is_null($this->container['name1']) && (mb_strlen($this->container['name1']) > 50)) {
             $invalidProperties[] = "invalid value for 'name1', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['name1']) < 1)) {
+        if (!is_null($this->container['name1']) && (mb_strlen($this->container['name1']) < 1)) {
             $invalidProperties[] = "invalid value for 'name1', the character length must be bigger than or equal to 1.";
         }
 
@@ -370,14 +367,11 @@ class ShipmentShipper implements ModelInterface, ArrayAccess, JsonSerializable
             $invalidProperties[] = "invalid value for 'name3', the character length must be bigger than or equal to 1.";
         }
 
-        if ($this->container['address_street'] === null) {
-            $invalidProperties[] = "'address_street' can't be null";
-        }
-        if ((mb_strlen($this->container['address_street']) > 50)) {
+        if (!is_null($this->container['address_street']) && (mb_strlen($this->container['address_street']) > 50)) {
             $invalidProperties[] = "invalid value for 'address_street', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['address_street']) < 1)) {
+        if (!is_null($this->container['address_street']) && (mb_strlen($this->container['address_street']) < 1)) {
             $invalidProperties[] = "invalid value for 'address_street', the character length must be bigger than or equal to 1.";
         }
 
@@ -401,20 +395,14 @@ class ShipmentShipper implements ModelInterface, ArrayAccess, JsonSerializable
             $invalidProperties[] = "invalid value for 'postal_code', must be conform to the pattern /^[0-9A-Za-z]+([ -]?[0-9A-Za-z]+)*$/.";
         }
 
-        if ($this->container['city'] === null) {
-            $invalidProperties[] = "'city' can't be null";
-        }
-        if ((mb_strlen($this->container['city']) > 40)) {
+        if (!is_null($this->container['city']) && (mb_strlen($this->container['city']) > 40)) {
             $invalidProperties[] = "invalid value for 'city', the character length must be smaller than or equal to 40.";
         }
 
-        if ((mb_strlen($this->container['city']) < 1)) {
+        if (!is_null($this->container['city']) && (mb_strlen($this->container['city']) < 1)) {
             $invalidProperties[] = "invalid value for 'city', the character length must be bigger than or equal to 1.";
         }
 
-        if ($this->container['country'] === null) {
-            $invalidProperties[] = "'country' can't be null";
-        }
         if (!is_null($this->container['contact_name']) && (mb_strlen($this->container['contact_name']) > 80)) {
             $invalidProperties[] = "invalid value for 'contact_name', the character length must be smaller than or equal to 80.";
         }
@@ -431,14 +419,11 @@ class ShipmentShipper implements ModelInterface, ArrayAccess, JsonSerializable
             $invalidProperties[] = "invalid value for 'email', the character length must be bigger than or equal to 3.";
         }
 
-        if ($this->container['shipper_ref'] === null) {
-            $invalidProperties[] = "'shipper_ref' can't be null";
-        }
-        if ((mb_strlen($this->container['shipper_ref']) > 50)) {
+        if (!is_null($this->container['shipper_ref']) && (mb_strlen($this->container['shipper_ref']) > 50)) {
             $invalidProperties[] = "invalid value for 'shipper_ref', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['shipper_ref']) < 0)) {
+        if (!is_null($this->container['shipper_ref']) && (mb_strlen($this->container['shipper_ref']) < 0)) {
             $invalidProperties[] = "invalid value for 'shipper_ref', the character length must be bigger than or equal to 0.";
         }
 
@@ -460,9 +445,9 @@ class ShipmentShipper implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets name1
      *
-     * @return string
+     * @return string|null
      */
-    public function getName1(): string
+    public function getName1(): ?string
     {
         return $this->container['name1'];
     }
@@ -470,11 +455,11 @@ class ShipmentShipper implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets name1
      *
-     * @param string $name1 Name1. Line 1 of name information
+     * @param string|null $name1 Name1. Line 1 of name information
      *
      * @return $this
      */
-    public function setName1(string $name1): static
+    public function setName1(?string $name1): static
     {
         if (is_null($name1)) {
             throw new InvalidArgumentException('non-nullable name1 cannot be null');
@@ -562,9 +547,9 @@ class ShipmentShipper implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets address_street
      *
-     * @return string
+     * @return string|null
      */
-    public function getAddressStreet(): string
+    public function getAddressStreet(): ?string
     {
         return $this->container['address_street'];
     }
@@ -572,11 +557,11 @@ class ShipmentShipper implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets address_street
      *
-     * @param string $address_street Line 1 of the street address. This is just the street name. Can also include house number.
+     * @param string|null $address_street Line 1 of the street address. This is just the street name. Can also include house number.
      *
      * @return $this
      */
-    public function setAddressStreet(string $address_street): static
+    public function setAddressStreet(?string $address_street): static
     {
         if (is_null($address_street)) {
             throw new InvalidArgumentException('non-nullable address_street cannot be null');
@@ -667,9 +652,9 @@ class ShipmentShipper implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets city
      *
-     * @return string
+     * @return string|null
      */
-    public function getCity(): string
+    public function getCity(): ?string
     {
         return $this->container['city'];
     }
@@ -677,11 +662,11 @@ class ShipmentShipper implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets city
      *
-     * @param string $city city
+     * @param string|null $city city
      *
      * @return $this
      */
-    public function setCity(string $city): static
+    public function setCity(?string $city): static
     {
         if (is_null($city)) {
             throw new InvalidArgumentException('non-nullable city cannot be null');
@@ -701,9 +686,9 @@ class ShipmentShipper implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets country
      *
-     * @return \Dhl\Rest\Shipping\Model\Country
+     * @return \Dhl\Rest\Shipping\Model\Country|null
      */
-    public function getCountry(): \Dhl\Rest\Shipping\Model\Country
+    public function getCountry(): ?\Dhl\Rest\Shipping\Model\Country
     {
         return $this->container['country'];
     }
@@ -711,11 +696,11 @@ class ShipmentShipper implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets country
      *
-     * @param \Dhl\Rest\Shipping\Model\Country $country country
+     * @param \Dhl\Rest\Shipping\Model\Country|null $country country
      *
      * @return $this
      */
-    public function setCountry(\Dhl\Rest\Shipping\Model\Country $country): static
+    public function setCountry(?\Dhl\Rest\Shipping\Model\Country $country): static
     {
         if (is_null($country)) {
             throw new InvalidArgumentException('non-nullable country cannot be null');
@@ -796,9 +781,9 @@ class ShipmentShipper implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets shipper_ref
      *
-     * @return string
+     * @return string|null
      */
-    public function getShipperRef(): string
+    public function getShipperRef(): ?string
     {
         return $this->container['shipper_ref'];
     }
@@ -806,11 +791,11 @@ class ShipmentShipper implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets shipper_ref
      *
-     * @param string $shipper_ref Reference string to the shipper data configured in GKP(GeschÃ¤ftskundenportal - Business Costumer Portal).
+     * @param string|null $shipper_ref Reference string to the shipper data configured in GKP(GeschÃ¤ftskundenportal - Business Costumer Portal).
      *
      * @return $this
      */
-    public function setShipperRef(string $shipper_ref): static
+    public function setShipperRef(?string $shipper_ref): static
     {
         if (is_null($shipper_ref)) {
             throw new InvalidArgumentException('non-nullable shipper_ref cannot be null');
