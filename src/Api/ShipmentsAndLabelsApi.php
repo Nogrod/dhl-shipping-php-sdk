@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ShipmentsAndLabelsApi
  * PHP version 8.1
@@ -162,8 +163,7 @@ class ShipmentsAndLabelsApi
         ?string $retoure_print_format = null,
         ?bool $combine = true,
         string $contentType = self::contentTypes['createOrders'][0]
-    ): \Dhl\Rest\Shipping\Model\LabelDataResponse|\Dhl\Rest\Shipping\Model\RequestStatus
-    {
+    ): \Dhl\Rest\Shipping\Model\LabelDataResponse|\Dhl\Rest\Shipping\Model\RequestStatus {
         list($response) = $this->createOrdersWithHttpInfo($shipment_order_request, $accept_language, $validate, $must_encode, $include_docs, $doc_format, $print_format, $retoure_print_format, $combine, $contentType);
         return $response;
     }
@@ -199,8 +199,7 @@ class ShipmentsAndLabelsApi
         ?string $retoure_print_format = null,
         ?bool $combine = true,
         string $contentType = self::contentTypes['createOrders'][0]
-    ): array
-    {
+    ): array {
         $request = $this->createOrdersRequest($shipment_order_request, $accept_language, $validate, $must_encode, $include_docs, $doc_format, $print_format, $retoure_print_format, $combine, $contentType);
 
         try {
@@ -226,9 +225,9 @@ class ShipmentsAndLabelsApi
             $statusCode = $response->getStatusCode();
 
 
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
-                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -255,7 +254,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 207:
-                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -282,7 +281,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 400:
-                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -309,7 +308,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 401:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -336,7 +335,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 429:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -363,7 +362,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 500:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -405,7 +404,7 @@ class ShipmentsAndLabelsApi
             }
 
             $returnType = '\Dhl\Rest\Shipping\Model\LabelDataResponse';
-            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
@@ -517,8 +516,7 @@ class ShipmentsAndLabelsApi
         ?string $retoure_print_format = null,
         ?bool $combine = true,
         string $contentType = self::contentTypes['createOrders'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->createOrdersAsyncWithHttpInfo($shipment_order_request, $accept_language, $validate, $must_encode, $include_docs, $doc_format, $print_format, $retoure_print_format, $combine, $contentType)
             ->then(
                 function ($response) {
@@ -557,8 +555,7 @@ class ShipmentsAndLabelsApi
         ?string $retoure_print_format = null,
         ?bool $combine = true,
         string $contentType = self::contentTypes['createOrders'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '\Dhl\Rest\Shipping\Model\LabelDataResponse';
         $request = $this->createOrdersRequest($shipment_order_request, $accept_language, $validate, $must_encode, $include_docs, $doc_format, $print_format, $retoure_print_format, $combine, $contentType);
 
@@ -566,7 +563,7 @@ class ShipmentsAndLabelsApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -626,8 +623,7 @@ class ShipmentsAndLabelsApi
         ?string $retoure_print_format = null,
         ?bool $combine = true,
         string $contentType = self::contentTypes['createOrders'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'shipment_order_request' is set
         if ($shipment_order_request === null || (is_array($shipment_order_request) && count($shipment_order_request) === 0)) {
@@ -811,8 +807,7 @@ class ShipmentsAndLabelsApi
     public function getLabel(
         string $token,
         string $contentType = self::contentTypes['getLabel'][0]
-    ): \Dhl\Rest\Shipping\Model\LabelDataResponse|\Dhl\Rest\Shipping\Model\RequestStatus
-    {
+    ): \Dhl\Rest\Shipping\Model\LabelDataResponse|\Dhl\Rest\Shipping\Model\RequestStatus {
         list($response) = $this->getLabelWithHttpInfo($token, $contentType);
         return $response;
     }
@@ -832,8 +827,7 @@ class ShipmentsAndLabelsApi
     public function getLabelWithHttpInfo(
         string $token,
         string $contentType = self::contentTypes['getLabel'][0]
-    ): array
-    {
+    ): array {
         $request = $this->getLabelRequest($token, $contentType);
 
         try {
@@ -859,9 +853,9 @@ class ShipmentsAndLabelsApi
             $statusCode = $response->getStatusCode();
 
 
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
-                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -888,7 +882,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 404:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -915,7 +909,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 429:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -942,7 +936,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 500:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -984,7 +978,7 @@ class ShipmentsAndLabelsApi
             }
 
             $returnType = '\Dhl\Rest\Shipping\Model\LabelDataResponse';
-            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
@@ -1064,8 +1058,7 @@ class ShipmentsAndLabelsApi
     public function getLabelAsync(
         string $token,
         string $contentType = self::contentTypes['getLabel'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->getLabelAsyncWithHttpInfo($token, $contentType)
             ->then(
                 function ($response) {
@@ -1088,8 +1081,7 @@ class ShipmentsAndLabelsApi
     public function getLabelAsyncWithHttpInfo(
         string $token,
         string $contentType = self::contentTypes['getLabel'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '\Dhl\Rest\Shipping\Model\LabelDataResponse';
         $request = $this->getLabelRequest($token, $contentType);
 
@@ -1097,7 +1089,7 @@ class ShipmentsAndLabelsApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -1141,8 +1133,7 @@ class ShipmentsAndLabelsApi
     public function getLabelRequest(
         string $token,
         string $contentType = self::contentTypes['getLabel'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'token' is set
         if ($token === null || (is_array($token) && count($token) === 0)) {
@@ -1265,8 +1256,7 @@ class ShipmentsAndLabelsApi
         ?string $include_docs = 'include',
         ?bool $combine = true,
         string $contentType = self::contentTypes['getOrder'][0]
-    ): \Dhl\Rest\Shipping\Model\LabelDataResponse|\Dhl\Rest\Shipping\Model\RequestStatus
-    {
+    ): \Dhl\Rest\Shipping\Model\LabelDataResponse|\Dhl\Rest\Shipping\Model\RequestStatus {
         list($response) = $this->getOrderWithHttpInfo($shipment, $accept_language, $doc_format, $print_format, $retoure_print_format, $include_docs, $combine, $contentType);
         return $response;
     }
@@ -1298,8 +1288,7 @@ class ShipmentsAndLabelsApi
         ?string $include_docs = 'include',
         ?bool $combine = true,
         string $contentType = self::contentTypes['getOrder'][0]
-    ): array
-    {
+    ): array {
         $request = $this->getOrderRequest($shipment, $accept_language, $doc_format, $print_format, $retoure_print_format, $include_docs, $combine, $contentType);
 
         try {
@@ -1325,9 +1314,9 @@ class ShipmentsAndLabelsApi
             $statusCode = $response->getStatusCode();
 
 
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
-                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -1354,7 +1343,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 207:
-                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -1381,7 +1370,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 400:
-                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -1408,7 +1397,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 401:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -1435,7 +1424,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 404:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -1462,7 +1451,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 429:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -1489,7 +1478,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 500:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -1531,7 +1520,7 @@ class ShipmentsAndLabelsApi
             }
 
             $returnType = '\Dhl\Rest\Shipping\Model\LabelDataResponse';
-            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
@@ -1647,8 +1636,7 @@ class ShipmentsAndLabelsApi
         ?string $include_docs = 'include',
         ?bool $combine = true,
         string $contentType = self::contentTypes['getOrder'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->getOrderAsyncWithHttpInfo($shipment, $accept_language, $doc_format, $print_format, $retoure_print_format, $include_docs, $combine, $contentType)
             ->then(
                 function ($response) {
@@ -1683,8 +1671,7 @@ class ShipmentsAndLabelsApi
         ?string $include_docs = 'include',
         ?bool $combine = true,
         string $contentType = self::contentTypes['getOrder'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '\Dhl\Rest\Shipping\Model\LabelDataResponse';
         $request = $this->getOrderRequest($shipment, $accept_language, $doc_format, $print_format, $retoure_print_format, $include_docs, $combine, $contentType);
 
@@ -1692,7 +1679,7 @@ class ShipmentsAndLabelsApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -1748,8 +1735,7 @@ class ShipmentsAndLabelsApi
         ?string $include_docs = 'include',
         ?bool $combine = true,
         string $contentType = self::contentTypes['getOrder'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'shipment' is set
         if ($shipment === null || (is_array($shipment) && count($shipment) === 0)) {
@@ -1919,8 +1905,7 @@ class ShipmentsAndLabelsApi
         string $shipment,
         ?string $accept_language = null,
         string $contentType = self::contentTypes['ordersAccountDelete'][0]
-    ): \Dhl\Rest\Shipping\Model\LabelDataResponse|\Dhl\Rest\Shipping\Model\RequestStatus
-    {
+    ): \Dhl\Rest\Shipping\Model\LabelDataResponse|\Dhl\Rest\Shipping\Model\RequestStatus {
         list($response) = $this->ordersAccountDeleteWithHttpInfo($profile, $shipment, $accept_language, $contentType);
         return $response;
     }
@@ -1944,8 +1929,7 @@ class ShipmentsAndLabelsApi
         string $shipment,
         ?string $accept_language = null,
         string $contentType = self::contentTypes['ordersAccountDelete'][0]
-    ): array
-    {
+    ): array {
         $request = $this->ordersAccountDeleteRequest($profile, $shipment, $accept_language, $contentType);
 
         try {
@@ -1971,9 +1955,9 @@ class ShipmentsAndLabelsApi
             $statusCode = $response->getStatusCode();
 
 
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
-                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -2000,7 +1984,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 207:
-                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -2027,7 +2011,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 400:
-                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -2054,7 +2038,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 401:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -2081,7 +2065,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 429:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -2108,7 +2092,7 @@ class ShipmentsAndLabelsApi
                         $response->getHeaders()
                     ];
                 case 500:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -2150,7 +2134,7 @@ class ShipmentsAndLabelsApi
             }
 
             $returnType = '\Dhl\Rest\Shipping\Model\LabelDataResponse';
-            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
@@ -2250,8 +2234,7 @@ class ShipmentsAndLabelsApi
         string $shipment,
         ?string $accept_language = null,
         string $contentType = self::contentTypes['ordersAccountDelete'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->ordersAccountDeleteAsyncWithHttpInfo($profile, $shipment, $accept_language, $contentType)
             ->then(
                 function ($response) {
@@ -2278,8 +2261,7 @@ class ShipmentsAndLabelsApi
         string $shipment,
         ?string $accept_language = null,
         string $contentType = self::contentTypes['ordersAccountDelete'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '\Dhl\Rest\Shipping\Model\LabelDataResponse';
         $request = $this->ordersAccountDeleteRequest($profile, $shipment, $accept_language, $contentType);
 
@@ -2287,7 +2269,7 @@ class ShipmentsAndLabelsApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -2335,8 +2317,7 @@ class ShipmentsAndLabelsApi
         string $shipment,
         ?string $accept_language = null,
         string $contentType = self::contentTypes['ordersAccountDelete'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'profile' is set
         if ($profile === null || (is_array($profile) && count($profile) === 0)) {

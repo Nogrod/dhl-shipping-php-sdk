@@ -1,4 +1,5 @@
 <?php
+
 /**
  * ManifestsApi
  * PHP version 8.1
@@ -146,8 +147,7 @@ class ManifestsApi
         ?string $include_docs = 'include',
         ?string $accept_language = null,
         string $contentType = self::contentTypes['getManifests'][0]
-    ): \Dhl\Rest\Shipping\Model\SingleManifestResponse|\Dhl\Rest\Shipping\Model\LabelDataResponse|\Dhl\Rest\Shipping\Model\RequestStatus
-    {
+    ): \Dhl\Rest\Shipping\Model\SingleManifestResponse|\Dhl\Rest\Shipping\Model\LabelDataResponse|\Dhl\Rest\Shipping\Model\RequestStatus {
         list($response) = $this->getManifestsWithHttpInfo($billing_number, $date, $include_docs, $accept_language, $contentType);
         return $response;
     }
@@ -173,8 +173,7 @@ class ManifestsApi
         ?string $include_docs = 'include',
         ?string $accept_language = null,
         string $contentType = self::contentTypes['getManifests'][0]
-    ): array
-    {
+    ): array {
         $request = $this->getManifestsRequest($billing_number, $date, $include_docs, $accept_language, $contentType);
 
         try {
@@ -200,9 +199,9 @@ class ManifestsApi
             $statusCode = $response->getStatusCode();
 
 
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 200:
-                    if (in_array('\Dhl\Rest\Shipping\Model\SingleManifestResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\SingleManifestResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -229,7 +228,7 @@ class ManifestsApi
                         $response->getHeaders()
                     ];
                 case 400:
-                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -256,7 +255,7 @@ class ManifestsApi
                         $response->getHeaders()
                     ];
                 case 401:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -283,7 +282,7 @@ class ManifestsApi
                         $response->getHeaders()
                     ];
                 case 404:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -310,7 +309,7 @@ class ManifestsApi
                         $response->getHeaders()
                     ];
                 case 429:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -337,7 +336,7 @@ class ManifestsApi
                         $response->getHeaders()
                     ];
                 case 500:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -379,7 +378,7 @@ class ManifestsApi
             }
 
             $returnType = '\Dhl\Rest\Shipping\Model\SingleManifestResponse';
-            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
@@ -481,8 +480,7 @@ class ManifestsApi
         ?string $include_docs = 'include',
         ?string $accept_language = null,
         string $contentType = self::contentTypes['getManifests'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->getManifestsAsyncWithHttpInfo($billing_number, $date, $include_docs, $accept_language, $contentType)
             ->then(
                 function ($response) {
@@ -511,8 +509,7 @@ class ManifestsApi
         ?string $include_docs = 'include',
         ?string $accept_language = null,
         string $contentType = self::contentTypes['getManifests'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '\Dhl\Rest\Shipping\Model\SingleManifestResponse';
         $request = $this->getManifestsRequest($billing_number, $date, $include_docs, $accept_language, $contentType);
 
@@ -520,7 +517,7 @@ class ManifestsApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -570,8 +567,7 @@ class ManifestsApi
         ?string $include_docs = 'include',
         ?string $accept_language = null,
         string $contentType = self::contentTypes['getManifests'][0]
-    ): Request
-    {
+    ): Request {
 
 
 
@@ -705,8 +701,7 @@ class ManifestsApi
         ?string $accept_language = null,
         ?bool $all = false,
         string $contentType = self::contentTypes['manifestsPost'][0]
-    ): \Dhl\Rest\Shipping\Model\MultipleManifestResponse|\Dhl\Rest\Shipping\Model\LabelDataResponse|\Dhl\Rest\Shipping\Model\RequestStatus
-    {
+    ): \Dhl\Rest\Shipping\Model\MultipleManifestResponse|\Dhl\Rest\Shipping\Model\LabelDataResponse|\Dhl\Rest\Shipping\Model\RequestStatus {
         list($response) = $this->manifestsPostWithHttpInfo($shipment_manifesting_request, $accept_language, $all, $contentType);
         return $response;
     }
@@ -730,8 +725,7 @@ class ManifestsApi
         ?string $accept_language = null,
         ?bool $all = false,
         string $contentType = self::contentTypes['manifestsPost'][0]
-    ): array
-    {
+    ): array {
         $request = $this->manifestsPostRequest($shipment_manifesting_request, $accept_language, $all, $contentType);
 
         try {
@@ -757,9 +751,9 @@ class ManifestsApi
             $statusCode = $response->getStatusCode();
 
 
-            switch($statusCode) {
+            switch ($statusCode) {
                 case 207:
-                    if (in_array('\Dhl\Rest\Shipping\Model\MultipleManifestResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\MultipleManifestResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -786,7 +780,7 @@ class ManifestsApi
                         $response->getHeaders()
                     ];
                 case 400:
-                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\LabelDataResponse', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -813,7 +807,7 @@ class ManifestsApi
                         $response->getHeaders()
                     ];
                 case 401:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -840,7 +834,7 @@ class ManifestsApi
                         $response->getHeaders()
                     ];
                 case 429:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -867,7 +861,7 @@ class ManifestsApi
                         $response->getHeaders()
                     ];
                 case 500:
-                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array('\Dhl\Rest\Shipping\Model\RequestStatus', ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -909,7 +903,7 @@ class ManifestsApi
             }
 
             $returnType = '\Dhl\Rest\Shipping\Model\MultipleManifestResponse';
-            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+            if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                 $content = $response->getBody(); //stream goes to serializer
             } else {
                 $content = (string) $response->getBody();
@@ -1001,8 +995,7 @@ class ManifestsApi
         ?string $accept_language = null,
         ?bool $all = false,
         string $contentType = self::contentTypes['manifestsPost'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         return $this->manifestsPostAsyncWithHttpInfo($shipment_manifesting_request, $accept_language, $all, $contentType)
             ->then(
                 function ($response) {
@@ -1029,8 +1022,7 @@ class ManifestsApi
         ?string $accept_language = null,
         ?bool $all = false,
         string $contentType = self::contentTypes['manifestsPost'][0]
-    ): PromiseInterface
-    {
+    ): PromiseInterface {
         $returnType = '\Dhl\Rest\Shipping\Model\MultipleManifestResponse';
         $request = $this->manifestsPostRequest($shipment_manifesting_request, $accept_language, $all, $contentType);
 
@@ -1038,7 +1030,7 @@ class ManifestsApi
             ->sendAsync($request, $this->createHttpClientOption())
             ->then(
                 function ($response) use ($returnType) {
-                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'])) {
+                    if (in_array($returnType, ['\SplFileObject', '\Psr\Http\Message\StreamInterface'], true)) {
                         $content = $response->getBody(); //stream goes to serializer
                     } else {
                         $content = (string) $response->getBody();
@@ -1086,8 +1078,7 @@ class ManifestsApi
         ?string $accept_language = null,
         ?bool $all = false,
         string $contentType = self::contentTypes['manifestsPost'][0]
-    ): Request
-    {
+    ): Request {
 
         // verify the required parameter 'shipment_manifesting_request' is set
         if ($shipment_manifesting_request === null || (is_array($shipment_manifesting_request) && count($shipment_manifesting_request) === 0)) {
