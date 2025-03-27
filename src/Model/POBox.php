@@ -322,14 +322,11 @@ class POBox implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['name1'] === null) {
-            $invalidProperties[] = "'name1' can't be null";
-        }
-        if ((mb_strlen($this->container['name1']) > 50)) {
+        if (!is_null($this->container['name1']) && (mb_strlen($this->container['name1']) > 50)) {
             $invalidProperties[] = "invalid value for 'name1', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['name1']) < 1)) {
+        if (!is_null($this->container['name1']) && (mb_strlen($this->container['name1']) < 1)) {
             $invalidProperties[] = "invalid value for 'name1', the character length must be bigger than or equal to 1.";
         }
 
@@ -349,9 +346,6 @@ class POBox implements ModelInterface, ArrayAccess, JsonSerializable
             $invalidProperties[] = "invalid value for 'name3', the character length must be bigger than or equal to 1.";
         }
 
-        if ($this->container['po_box_id'] === null) {
-            $invalidProperties[] = "'po_box_id' can't be null";
-        }
         if (!is_null($this->container['email']) && (mb_strlen($this->container['email']) > 80)) {
             $invalidProperties[] = "invalid value for 'email', the character length must be smaller than or equal to 80.";
         }
@@ -360,29 +354,23 @@ class POBox implements ModelInterface, ArrayAccess, JsonSerializable
             $invalidProperties[] = "invalid value for 'email', the character length must be bigger than or equal to 3.";
         }
 
-        if ($this->container['city'] === null) {
-            $invalidProperties[] = "'city' can't be null";
-        }
-        if ((mb_strlen($this->container['city']) > 80)) {
+        if (!is_null($this->container['city']) && (mb_strlen($this->container['city']) > 80)) {
             $invalidProperties[] = "invalid value for 'city', the character length must be smaller than or equal to 80.";
         }
 
-        if ((mb_strlen($this->container['city']) < 0)) {
+        if (!is_null($this->container['city']) && (mb_strlen($this->container['city']) < 0)) {
             $invalidProperties[] = "invalid value for 'city', the character length must be bigger than or equal to 0.";
         }
 
-        if ($this->container['postal_code'] === null) {
-            $invalidProperties[] = "'postal_code' can't be null";
-        }
-        if ((mb_strlen($this->container['postal_code']) > 10)) {
+        if (!is_null($this->container['postal_code']) && (mb_strlen($this->container['postal_code']) > 10)) {
             $invalidProperties[] = "invalid value for 'postal_code', the character length must be smaller than or equal to 10.";
         }
 
-        if ((mb_strlen($this->container['postal_code']) < 3)) {
+        if (!is_null($this->container['postal_code']) && (mb_strlen($this->container['postal_code']) < 3)) {
             $invalidProperties[] = "invalid value for 'postal_code', the character length must be bigger than or equal to 3.";
         }
 
-        if (!preg_match("/^[0-9A-Za-z]+([ -]?[0-9A-Za-z]+)*$/", $this->container['postal_code'])) {
+        if (!is_null($this->container['postal_code']) && !preg_match("/^[0-9A-Za-z]+([ -]?[0-9A-Za-z]+)*$/", $this->container['postal_code'])) {
             $invalidProperties[] = "invalid value for 'postal_code', must be conform to the pattern /^[0-9A-Za-z]+([ -]?[0-9A-Za-z]+)*$/.";
         }
 
@@ -404,9 +392,9 @@ class POBox implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets name1
      *
-     * @return string
+     * @return string|null
      */
-    public function getName1(): string
+    public function getName1(): ?string
     {
         return $this->container['name1'];
     }
@@ -414,11 +402,11 @@ class POBox implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets name1
      *
-     * @param string $name1 Name1. Line 1 of name information
+     * @param string|null $name1 Name1. Line 1 of name information
      *
      * @return $this
      */
-    public function setName1(string $name1): static
+    public function setName1(?string $name1): static
     {
         if (is_null($name1)) {
             throw new InvalidArgumentException('non-nullable name1 cannot be null');
@@ -506,9 +494,9 @@ class POBox implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets po_box_id
      *
-     * @return int
+     * @return int|null
      */
-    public function getPoBoxId(): int
+    public function getPoBoxId(): ?int
     {
         return $this->container['po_box_id'];
     }
@@ -516,11 +504,11 @@ class POBox implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets po_box_id
      *
-     * @param int $po_box_id Number of P.O. Box (Postfach)
+     * @param int|null $po_box_id Number of P.O. Box (Postfach)
      *
      * @return $this
      */
-    public function setPoBoxId(int $po_box_id): static
+    public function setPoBoxId(?int $po_box_id): static
     {
         if (is_null($po_box_id)) {
             throw new InvalidArgumentException('non-nullable po_box_id cannot be null');
@@ -567,9 +555,9 @@ class POBox implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets city
      *
-     * @return string
+     * @return string|null
      */
-    public function getCity(): string
+    public function getCity(): ?string
     {
         return $this->container['city'];
     }
@@ -577,11 +565,11 @@ class POBox implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets city
      *
-     * @param string $city City of the P.O. Box (Postfach) location
+     * @param string|null $city City of the P.O. Box (Postfach) location
      *
      * @return $this
      */
-    public function setCity(string $city): static
+    public function setCity(?string $city): static
     {
         if (is_null($city)) {
             throw new InvalidArgumentException('non-nullable city cannot be null');
@@ -628,9 +616,9 @@ class POBox implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets postal_code
      *
-     * @return string
+     * @return string|null
      */
-    public function getPostalCode(): string
+    public function getPostalCode(): ?string
     {
         return $this->container['postal_code'];
     }
@@ -638,11 +626,11 @@ class POBox implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets postal_code
      *
-     * @param string $postal_code Postal code of the P.O. Box (Postfach) location
+     * @param string|null $postal_code Postal code of the P.O. Box (Postfach) location
      *
      * @return $this
      */
-    public function setPostalCode(string $postal_code): static
+    public function setPostalCode(?string $postal_code): static
     {
         if (is_null($postal_code)) {
             throw new InvalidArgumentException('non-nullable postal_code cannot be null');

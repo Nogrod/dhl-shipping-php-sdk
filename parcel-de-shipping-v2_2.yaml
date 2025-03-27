@@ -883,11 +883,6 @@ components:
         - $ref: '#/components/schemas/PostOffice'
         - $ref: '#/components/schemas/POBox'
     ContactAddress:
-      required:
-        - addressStreet
-        - city
-        - country
-        - name1
       type: object
       properties:
         name1:
@@ -1096,12 +1091,6 @@ components:
           example: 15
       description: Physical dimensions (aka 'Gurtmass') of the parcel. If you provide the dimension information, all attributes need to be provided. You cannot provide just the height, for example. If you provide length, width, and height in millimeters, they will be rounded to full cm.
     Locker:
-      required:
-        - city
-        - lockerID
-        - name
-        - postNumber
-        - postalCode
       type: object
       properties:
         name:
@@ -1136,11 +1125,6 @@ components:
           type: string
       description: Only usable for German Packstation, international lockers cannot be addressed directly. If your customer wishes for international delivery to a droppoint, please use DHL Parcel International (V53WPAK) with the delivery type "Closest Droppoint".
     PostOffice:
-      required:
-        - city
-        - name
-        - postalCode
-        - retailID
       type: object
       properties:
         name:
@@ -1183,11 +1167,6 @@ components:
           type: string
       description: Only usable for German post offices or retail outlets (Paketshops), international postOffices or retail outlets cannot be addressed directly. If your customer wishes for international delivery to a droppoint, please use DHL Parcel International (V53WPAK) with the delivery type "Closest Droppoint".
     POBox:
-        required:
-            - name1
-            - poBoxID
-            - city
-            - postalCode
         type: object
         properties:
           name1:

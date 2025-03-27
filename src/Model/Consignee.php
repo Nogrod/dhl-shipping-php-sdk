@@ -406,14 +406,11 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['name1'] === null) {
-            $invalidProperties[] = "'name1' can't be null";
-        }
-        if ((mb_strlen($this->container['name1']) > 50)) {
+        if (!is_null($this->container['name1']) && (mb_strlen($this->container['name1']) > 50)) {
             $invalidProperties[] = "invalid value for 'name1', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['name1']) < 1)) {
+        if (!is_null($this->container['name1']) && (mb_strlen($this->container['name1']) < 1)) {
             $invalidProperties[] = "invalid value for 'name1', the character length must be bigger than or equal to 1.";
         }
 
@@ -441,14 +438,11 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
             $invalidProperties[] = "invalid value for 'dispatching_information', the character length must be bigger than or equal to 1.";
         }
 
-        if ($this->container['address_street'] === null) {
-            $invalidProperties[] = "'address_street' can't be null";
-        }
-        if ((mb_strlen($this->container['address_street']) > 50)) {
+        if (!is_null($this->container['address_street']) && (mb_strlen($this->container['address_street']) > 50)) {
             $invalidProperties[] = "invalid value for 'address_street', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['address_street']) < 1)) {
+        if (!is_null($this->container['address_street']) && (mb_strlen($this->container['address_street']) < 1)) {
             $invalidProperties[] = "invalid value for 'address_street', the character length must be bigger than or equal to 1.";
         }
 
@@ -476,29 +470,23 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
             $invalidProperties[] = "invalid value for 'additional_address_information2', the character length must be bigger than or equal to 1.";
         }
 
-        if ($this->container['postal_code'] === null) {
-            $invalidProperties[] = "'postal_code' can't be null";
-        }
-        if ((mb_strlen($this->container['postal_code']) > 10)) {
+        if (!is_null($this->container['postal_code']) && (mb_strlen($this->container['postal_code']) > 10)) {
             $invalidProperties[] = "invalid value for 'postal_code', the character length must be smaller than or equal to 10.";
         }
 
-        if ((mb_strlen($this->container['postal_code']) < 3)) {
+        if (!is_null($this->container['postal_code']) && (mb_strlen($this->container['postal_code']) < 3)) {
             $invalidProperties[] = "invalid value for 'postal_code', the character length must be bigger than or equal to 3.";
         }
 
-        if (!preg_match("/^[0-9A-Za-z]+([ -]?[0-9A-Za-z]+)*$/", $this->container['postal_code'])) {
+        if (!is_null($this->container['postal_code']) && !preg_match("/^[0-9A-Za-z]+([ -]?[0-9A-Za-z]+)*$/", $this->container['postal_code'])) {
             $invalidProperties[] = "invalid value for 'postal_code', must be conform to the pattern /^[0-9A-Za-z]+([ -]?[0-9A-Za-z]+)*$/.";
         }
 
-        if ($this->container['city'] === null) {
-            $invalidProperties[] = "'city' can't be null";
-        }
-        if ((mb_strlen($this->container['city']) > 80)) {
+        if (!is_null($this->container['city']) && (mb_strlen($this->container['city']) > 80)) {
             $invalidProperties[] = "invalid value for 'city', the character length must be smaller than or equal to 80.";
         }
 
-        if ((mb_strlen($this->container['city']) < 0)) {
+        if (!is_null($this->container['city']) && (mb_strlen($this->container['city']) < 0)) {
             $invalidProperties[] = "invalid value for 'city', the character length must be bigger than or equal to 0.";
         }
 
@@ -510,9 +498,6 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
             $invalidProperties[] = "invalid value for 'state', the character length must be bigger than or equal to 1.";
         }
 
-        if ($this->container['country'] === null) {
-            $invalidProperties[] = "'country' can't be null";
-        }
         if (!is_null($this->container['contact_name']) && (mb_strlen($this->container['contact_name']) > 80)) {
             $invalidProperties[] = "invalid value for 'contact_name', the character length must be smaller than or equal to 80.";
         }
@@ -537,57 +522,42 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
             $invalidProperties[] = "invalid value for 'email', the character length must be bigger than or equal to 3.";
         }
 
-        if ($this->container['name'] === null) {
-            $invalidProperties[] = "'name' can't be null";
-        }
-        if ((mb_strlen($this->container['name']) > 50)) {
+        if (!is_null($this->container['name']) && (mb_strlen($this->container['name']) > 50)) {
             $invalidProperties[] = "invalid value for 'name', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['name']) < 1)) {
+        if (!is_null($this->container['name']) && (mb_strlen($this->container['name']) < 1)) {
             $invalidProperties[] = "invalid value for 'name', the character length must be bigger than or equal to 1.";
         }
 
-        if ($this->container['locker_id'] === null) {
-            $invalidProperties[] = "'locker_id' can't be null";
-        }
-        if (($this->container['locker_id'] > 999)) {
+        if (!is_null($this->container['locker_id']) && ($this->container['locker_id'] > 999)) {
             $invalidProperties[] = "invalid value for 'locker_id', must be smaller than or equal to 999.";
         }
 
-        if (($this->container['locker_id'] < 100)) {
+        if (!is_null($this->container['locker_id']) && ($this->container['locker_id'] < 100)) {
             $invalidProperties[] = "invalid value for 'locker_id', must be bigger than or equal to 100.";
         }
 
-        if ($this->container['post_number'] === null) {
-            $invalidProperties[] = "'post_number' can't be null";
-        }
-        if ((mb_strlen($this->container['post_number']) > 10)) {
+        if (!is_null($this->container['post_number']) && (mb_strlen($this->container['post_number']) > 10)) {
             $invalidProperties[] = "invalid value for 'post_number', the character length must be smaller than or equal to 10.";
         }
 
-        if ((mb_strlen($this->container['post_number']) < 3)) {
+        if (!is_null($this->container['post_number']) && (mb_strlen($this->container['post_number']) < 3)) {
             $invalidProperties[] = "invalid value for 'post_number', the character length must be bigger than or equal to 3.";
         }
 
-        if (!preg_match("/^[0-9]{6,10}$/", $this->container['post_number'])) {
+        if (!is_null($this->container['post_number']) && !preg_match("/^[0-9]{6,10}$/", $this->container['post_number'])) {
             $invalidProperties[] = "invalid value for 'post_number', must be conform to the pattern /^[0-9]{6,10}$/.";
         }
 
-        if ($this->container['retail_id'] === null) {
-            $invalidProperties[] = "'retail_id' can't be null";
-        }
-        if (($this->container['retail_id'] > 999)) {
+        if (!is_null($this->container['retail_id']) && ($this->container['retail_id'] > 999)) {
             $invalidProperties[] = "invalid value for 'retail_id', must be smaller than or equal to 999.";
         }
 
-        if (($this->container['retail_id'] < 401)) {
+        if (!is_null($this->container['retail_id']) && ($this->container['retail_id'] < 401)) {
             $invalidProperties[] = "invalid value for 'retail_id', must be bigger than or equal to 401.";
         }
 
-        if ($this->container['po_box_id'] === null) {
-            $invalidProperties[] = "'po_box_id' can't be null";
-        }
         return $invalidProperties;
     }
 
@@ -606,9 +576,9 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets name1
      *
-     * @return string
+     * @return string|null
      */
-    public function getName1(): string
+    public function getName1(): ?string
     {
         return $this->container['name1'];
     }
@@ -616,11 +586,11 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets name1
      *
-     * @param string $name1 Name1. Line 1 of name information
+     * @param string|null $name1 Name1. Line 1 of name information
      *
      * @return $this
      */
-    public function setName1(string $name1): static
+    public function setName1(?string $name1): static
     {
         if (is_null($name1)) {
             throw new InvalidArgumentException('non-nullable name1 cannot be null');
@@ -742,9 +712,9 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets address_street
      *
-     * @return string
+     * @return string|null
      */
-    public function getAddressStreet(): string
+    public function getAddressStreet(): ?string
     {
         return $this->container['address_street'];
     }
@@ -752,11 +722,11 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets address_street
      *
-     * @param string $address_street Line 1 of the street address. This is just the street name. Can also include house number.
+     * @param string|null $address_street Line 1 of the street address. This is just the street name. Can also include house number.
      *
      * @return $this
      */
-    public function setAddressStreet(string $address_street): static
+    public function setAddressStreet(?string $address_street): static
     {
         if (is_null($address_street)) {
             throw new InvalidArgumentException('non-nullable address_street cannot be null');
@@ -878,9 +848,9 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets postal_code
      *
-     * @return string
+     * @return string|null
      */
-    public function getPostalCode(): string
+    public function getPostalCode(): ?string
     {
         return $this->container['postal_code'];
     }
@@ -888,11 +858,11 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets postal_code
      *
-     * @param string $postal_code Postal code of the P.O. Box (Postfach) location
+     * @param string|null $postal_code Postal code of the P.O. Box (Postfach) location
      *
      * @return $this
      */
-    public function setPostalCode(string $postal_code): static
+    public function setPostalCode(?string $postal_code): static
     {
         if (is_null($postal_code)) {
             throw new InvalidArgumentException('non-nullable postal_code cannot be null');
@@ -915,9 +885,9 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets city
      *
-     * @return string
+     * @return string|null
      */
-    public function getCity(): string
+    public function getCity(): ?string
     {
         return $this->container['city'];
     }
@@ -925,11 +895,11 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets city
      *
-     * @param string $city City of the P.O. Box (Postfach) location
+     * @param string|null $city City of the P.O. Box (Postfach) location
      *
      * @return $this
      */
-    public function setCity(string $city): static
+    public function setCity(?string $city): static
     {
         if (is_null($city)) {
             throw new InvalidArgumentException('non-nullable city cannot be null');
@@ -983,9 +953,9 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets country
      *
-     * @return \Dhl\Rest\Shipping\Model\Country
+     * @return \Dhl\Rest\Shipping\Model\Country|null
      */
-    public function getCountry(): \Dhl\Rest\Shipping\Model\Country
+    public function getCountry(): ?\Dhl\Rest\Shipping\Model\Country
     {
         return $this->container['country'];
     }
@@ -993,11 +963,11 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets country
      *
-     * @param \Dhl\Rest\Shipping\Model\Country $country country
+     * @param \Dhl\Rest\Shipping\Model\Country|null $country country
      *
      * @return $this
      */
-    public function setCountry(\Dhl\Rest\Shipping\Model\Country $country): static
+    public function setCountry(?\Dhl\Rest\Shipping\Model\Country $country): static
     {
         if (is_null($country)) {
             throw new InvalidArgumentException('non-nullable country cannot be null');
@@ -1112,9 +1082,9 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets name
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->container['name'];
     }
@@ -1122,11 +1092,11 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets name
      *
-     * @param string $name Name
+     * @param string|null $name Name
      *
      * @return $this
      */
-    public function setName(string $name): static
+    public function setName(?string $name): static
     {
         if (is_null($name)) {
             throw new InvalidArgumentException('non-nullable name cannot be null');
@@ -1146,9 +1116,9 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets locker_id
      *
-     * @return int
+     * @return int|null
      */
-    public function getLockerId(): int
+    public function getLockerId(): ?int
     {
         return $this->container['locker_id'];
     }
@@ -1156,11 +1126,11 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets locker_id
      *
-     * @param int $locker_id Packstationnummer. Three digit number identifying the parcel locker in conjunction with city and postal code
+     * @param int|null $locker_id Packstationnummer. Three digit number identifying the parcel locker in conjunction with city and postal code
      *
      * @return $this
      */
-    public function setLockerId(int $locker_id): static
+    public function setLockerId(?int $locker_id): static
     {
         if (is_null($locker_id)) {
             throw new InvalidArgumentException('non-nullable locker_id cannot be null');
@@ -1181,9 +1151,9 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets post_number
      *
-     * @return string
+     * @return string|null
      */
-    public function getPostNumber(): string
+    public function getPostNumber(): ?string
     {
         return $this->container['post_number'];
     }
@@ -1191,11 +1161,11 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets post_number
      *
-     * @param string $post_number postNumber (Postnummer) is the official account number a private DHL Customer gets upon registration. To address a post office or retail outlet directly, either the post number or e-mail address of the consignee is needed.
+     * @param string|null $post_number postNumber (Postnummer) is the official account number a private DHL Customer gets upon registration. To address a post office or retail outlet directly, either the post number or e-mail address of the consignee is needed.
      *
      * @return $this
      */
-    public function setPostNumber(string $post_number): static
+    public function setPostNumber(?string $post_number): static
     {
         if (is_null($post_number)) {
             throw new InvalidArgumentException('non-nullable post_number cannot be null');
@@ -1218,9 +1188,9 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets retail_id
      *
-     * @return int
+     * @return int|null
      */
-    public function getRetailId(): int
+    public function getRetailId(): ?int
     {
         return $this->container['retail_id'];
     }
@@ -1228,11 +1198,11 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets retail_id
      *
-     * @param int $retail_id Id or Number of Post office / Filiale / outlet / parcel shop
+     * @param int|null $retail_id Id or Number of Post office / Filiale / outlet / parcel shop
      *
      * @return $this
      */
-    public function setRetailId(int $retail_id): static
+    public function setRetailId(?int $retail_id): static
     {
         if (is_null($retail_id)) {
             throw new InvalidArgumentException('non-nullable retail_id cannot be null');
@@ -1253,9 +1223,9 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets po_box_id
      *
-     * @return int
+     * @return int|null
      */
-    public function getPoBoxId(): int
+    public function getPoBoxId(): ?int
     {
         return $this->container['po_box_id'];
     }
@@ -1263,11 +1233,11 @@ class Consignee implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets po_box_id
      *
-     * @param int $po_box_id Number of P.O. Box (Postfach)
+     * @param int|null $po_box_id Number of P.O. Box (Postfach)
      *
      * @return $this
      */
-    public function setPoBoxId(int $po_box_id): static
+    public function setPoBoxId(?int $po_box_id): static
     {
         if (is_null($po_box_id)) {
             throw new InvalidArgumentException('non-nullable po_box_id cannot be null');

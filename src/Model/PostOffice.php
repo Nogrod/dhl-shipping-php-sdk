@@ -315,25 +315,19 @@ class PostOffice implements ModelInterface, ArrayAccess, JsonSerializable
     {
         $invalidProperties = [];
 
-        if ($this->container['name'] === null) {
-            $invalidProperties[] = "'name' can't be null";
-        }
-        if ((mb_strlen($this->container['name']) > 50)) {
+        if (!is_null($this->container['name']) && (mb_strlen($this->container['name']) > 50)) {
             $invalidProperties[] = "invalid value for 'name', the character length must be smaller than or equal to 50.";
         }
 
-        if ((mb_strlen($this->container['name']) < 1)) {
+        if (!is_null($this->container['name']) && (mb_strlen($this->container['name']) < 1)) {
             $invalidProperties[] = "invalid value for 'name', the character length must be bigger than or equal to 1.";
         }
 
-        if ($this->container['retail_id'] === null) {
-            $invalidProperties[] = "'retail_id' can't be null";
-        }
-        if (($this->container['retail_id'] > 999)) {
+        if (!is_null($this->container['retail_id']) && ($this->container['retail_id'] > 999)) {
             $invalidProperties[] = "invalid value for 'retail_id', must be smaller than or equal to 999.";
         }
 
-        if (($this->container['retail_id'] < 401)) {
+        if (!is_null($this->container['retail_id']) && ($this->container['retail_id'] < 401)) {
             $invalidProperties[] = "invalid value for 'retail_id', must be bigger than or equal to 401.";
         }
 
@@ -357,29 +351,23 @@ class PostOffice implements ModelInterface, ArrayAccess, JsonSerializable
             $invalidProperties[] = "invalid value for 'email', the character length must be bigger than or equal to 3.";
         }
 
-        if ($this->container['city'] === null) {
-            $invalidProperties[] = "'city' can't be null";
-        }
-        if ((mb_strlen($this->container['city']) > 80)) {
+        if (!is_null($this->container['city']) && (mb_strlen($this->container['city']) > 80)) {
             $invalidProperties[] = "invalid value for 'city', the character length must be smaller than or equal to 80.";
         }
 
-        if ((mb_strlen($this->container['city']) < 0)) {
+        if (!is_null($this->container['city']) && (mb_strlen($this->container['city']) < 0)) {
             $invalidProperties[] = "invalid value for 'city', the character length must be bigger than or equal to 0.";
         }
 
-        if ($this->container['postal_code'] === null) {
-            $invalidProperties[] = "'postal_code' can't be null";
-        }
-        if ((mb_strlen($this->container['postal_code']) > 10)) {
+        if (!is_null($this->container['postal_code']) && (mb_strlen($this->container['postal_code']) > 10)) {
             $invalidProperties[] = "invalid value for 'postal_code', the character length must be smaller than or equal to 10.";
         }
 
-        if ((mb_strlen($this->container['postal_code']) < 3)) {
+        if (!is_null($this->container['postal_code']) && (mb_strlen($this->container['postal_code']) < 3)) {
             $invalidProperties[] = "invalid value for 'postal_code', the character length must be bigger than or equal to 3.";
         }
 
-        if (!preg_match("/^[0-9A-Za-z]+([ -]?[0-9A-Za-z]+)*$/", $this->container['postal_code'])) {
+        if (!is_null($this->container['postal_code']) && !preg_match("/^[0-9A-Za-z]+([ -]?[0-9A-Za-z]+)*$/", $this->container['postal_code'])) {
             $invalidProperties[] = "invalid value for 'postal_code', must be conform to the pattern /^[0-9A-Za-z]+([ -]?[0-9A-Za-z]+)*$/.";
         }
 
@@ -401,9 +389,9 @@ class PostOffice implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets name
      *
-     * @return string
+     * @return string|null
      */
-    public function getName(): string
+    public function getName(): ?string
     {
         return $this->container['name'];
     }
@@ -411,11 +399,11 @@ class PostOffice implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets name
      *
-     * @param string $name Name
+     * @param string|null $name Name
      *
      * @return $this
      */
-    public function setName(string $name): static
+    public function setName(?string $name): static
     {
         if (is_null($name)) {
             throw new InvalidArgumentException('non-nullable name cannot be null');
@@ -435,9 +423,9 @@ class PostOffice implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets retail_id
      *
-     * @return int
+     * @return int|null
      */
-    public function getRetailId(): int
+    public function getRetailId(): ?int
     {
         return $this->container['retail_id'];
     }
@@ -445,11 +433,11 @@ class PostOffice implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets retail_id
      *
-     * @param int $retail_id Id or Number of Post office / Filiale / outlet / parcel shop
+     * @param int|null $retail_id Id or Number of Post office / Filiale / outlet / parcel shop
      *
      * @return $this
      */
-    public function setRetailId(int $retail_id): static
+    public function setRetailId(?int $retail_id): static
     {
         if (is_null($retail_id)) {
             throw new InvalidArgumentException('non-nullable retail_id cannot be null');
@@ -541,9 +529,9 @@ class PostOffice implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets city
      *
-     * @return string
+     * @return string|null
      */
-    public function getCity(): string
+    public function getCity(): ?string
     {
         return $this->container['city'];
     }
@@ -551,11 +539,11 @@ class PostOffice implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets city
      *
-     * @param string $city City where the retail location is
+     * @param string|null $city City where the retail location is
      *
      * @return $this
      */
-    public function setCity(string $city): static
+    public function setCity(?string $city): static
     {
         if (is_null($city)) {
             throw new InvalidArgumentException('non-nullable city cannot be null');
@@ -602,9 +590,9 @@ class PostOffice implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Gets postal_code
      *
-     * @return string
+     * @return string|null
      */
-    public function getPostalCode(): string
+    public function getPostalCode(): ?string
     {
         return $this->container['postal_code'];
     }
@@ -612,11 +600,11 @@ class PostOffice implements ModelInterface, ArrayAccess, JsonSerializable
     /**
      * Sets postal_code
      *
-     * @param string $postal_code postal_code
+     * @param string|null $postal_code postal_code
      *
      * @return $this
      */
-    public function setPostalCode(string $postal_code): static
+    public function setPostalCode(?string $postal_code): static
     {
         if (is_null($postal_code)) {
             throw new InvalidArgumentException('non-nullable postal_code cannot be null');
