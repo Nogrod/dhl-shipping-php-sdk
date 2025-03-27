@@ -1,1 +1,2 @@
 java -jar openapi-generator-cli.jar generate -i parcel-de-shipping-v2_2.yaml -g php-nextgen --git-user-id nogrod --git-repo-id dhl-shipping-php-sdk --enable-post-process-file --additional-properties invokerPackage=Dhl\Rest\Shipping
+vendor\bin\php-cs-fixer fix --allow-risky=yes
