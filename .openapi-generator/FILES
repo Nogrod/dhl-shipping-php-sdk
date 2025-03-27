@@ -1,4 +1,3 @@
-.gitignore
 .php-cs-fixer.dist.php
 .phplint.yml
 .travis.yml
