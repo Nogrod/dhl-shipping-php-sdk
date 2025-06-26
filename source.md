@@ -1,0 +1,1 @@
+https://developer.dhl.com/api-reference/parcel-de-shipping-post-parcel-germany-v2#downloads-section

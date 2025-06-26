@@ -48,6 +48,7 @@ src/Api/ManifestsApi.php
 src/Api/ShipmentsAndLabelsApi.php
 src/ApiException.php
 src/Configuration.php
+src/FormDataProcessor.php
 src/HeaderSelector.php
 src/Model/BankAccount.php
 src/Model/Commodity.php
