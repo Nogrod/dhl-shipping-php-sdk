@@ -99,7 +99,7 @@ try {
 ## `getLabel()`
 
 ```php
-getLabel($token): \Dhl\Rest\Shipping\Model\LabelDataResponse
+getLabel($token): \SplFileObject
 ```
 
 Download PDF document
@@ -113,25 +113,11 @@ Public download URL for shipment labels and documents. The URL is provided in th
 require_once(__DIR__ . '/vendor/autoload.php');
 
 
-// Configure OAuth2 access token for authorization: OAuth2
-$config = Dhl\Rest\Shipping\Configuration::getDefaultConfiguration()->setAccessToken('YOUR_ACCESS_TOKEN');
-
-// Configure API key authorization: ApiKey
-$config = Dhl\Rest\Shipping\Configuration::getDefaultConfiguration()->setApiKey('dhl-api-key', 'YOUR_API_KEY');
-// Uncomment below to setup prefix (e.g. Bearer) for API key, if needed
-// $config = Dhl\Rest\Shipping\Configuration::getDefaultConfiguration()->setApiKeyPrefix('dhl-api-key', 'Bearer');
-
-// Configure HTTP basic authorization: BasicAuth
-$config = Dhl\Rest\Shipping\Configuration::getDefaultConfiguration()
-              ->setUsername('YOUR_USERNAME')
-              ->setPassword('YOUR_PASSWORD');
-
 
 $apiInstance = new Dhl\Rest\Shipping\Api\ShipmentsAndLabelsApi(
     // If you want use custom http client, pass your client which implements `GuzzleHttp\ClientInterface`.
     // This is optional, `GuzzleHttp\Client` will be used as default.
-    new GuzzleHttp\Client(),
-    $config
+    new GuzzleHttp\Client()
 );
 $token = 'token_example'; // string | Identifies PDF document and requested print settings for download.
 
@@ -151,16 +137,16 @@ try {
 
 ### Return type
 
-[**\Dhl\Rest\Shipping\Model\LabelDataResponse**](../Model/LabelDataResponse.md)
+**\SplFileObject**
 
 ### Authorization
 
-[OAuth2](../../README.md#OAuth2), [ApiKey](../../README.md#ApiKey), [BasicAuth](../../README.md#BasicAuth)
+No authorization required
 
 ### HTTP request headers
 
 - **Content-Type**: Not defined
-- **Accept**: `application/pdf`, `application/json`, `application/problem+json`
+- **Accept**: `application/pdf`, `application/problem+json`
 
 [[Back to top]](#) [[Back to API list]](../../README.md#endpoints)
 [[Back to Model list]](../../README.md#models)

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * ShipmentManifestingRequest
+ * ShipmentNoToSheetNo
  *
  * PHP version 8.1
  *
@@ -35,15 +35,15 @@ use ReturnTypeWillChange;
 use Dhl\Rest\Shipping\ObjectSerializer;
 
 /**
- * ShipmentManifestingRequest Class Doc Comment
+ * ShipmentNoToSheetNo Class Doc Comment
  *
- * @description List of shipments which shall be manifested.
+ * @description Mapping between shipment number and sheet number
  * @package  Dhl\Rest\Shipping
  * @author   OpenAPI Generator team
  * @link     https://openapi-generator.tech
  * @implements ArrayAccess<string, mixed>
  */
-class ShipmentManifestingRequest implements ModelInterface, ArrayAccess, JsonSerializable
+class ShipmentNoToSheetNo implements ModelInterface, ArrayAccess, JsonSerializable
 {
     public const DISCRIMINATOR = null;
 
@@ -52,7 +52,7 @@ class ShipmentManifestingRequest implements ModelInterface, ArrayAccess, JsonSer
       *
       * @var string
       */
-    protected static string $openAPIModelName = 'ShipmentManifestingRequest';
+    protected static string $openAPIModelName = 'ShipmentNoToSheetNo';
 
     /**
       * Array of property to type mappings. Used for (de)serialization
@@ -60,9 +60,9 @@ class ShipmentManifestingRequest implements ModelInterface, ArrayAccess, JsonSer
       * @var array<string, string>
       */
     protected static array $openAPITypes = [
-        'profile' => 'string',
-        'shipment_numbers' => 'string[]',
-        'billing_number' => 'string'
+        'shipment_no' => 'string',
+        'sheet_no' => 'string',
+        'sstatus' => '\Dhl\Rest\Shipping\Model\RequestStatus'
     ];
 
     /**
@@ -71,9 +71,9 @@ class ShipmentManifestingRequest implements ModelInterface, ArrayAccess, JsonSer
       * @var array<string, string|null>
       */
     protected static array $openAPIFormats = [
-        'profile' => null,
-        'shipment_numbers' => null,
-        'billing_number' => null
+        'shipment_no' => null,
+        'sheet_no' => null,
+        'sstatus' => null
     ];
 
     /**
@@ -82,9 +82,9 @@ class ShipmentManifestingRequest implements ModelInterface, ArrayAccess, JsonSer
       * @var array<string, bool>
       */
     protected static array $openAPINullables = [
-        'profile' => false,
-        'shipment_numbers' => false,
-        'billing_number' => false
+        'shipment_no' => false,
+        'sheet_no' => false,
+        'sstatus' => false
     ];
 
     /**
@@ -173,9 +173,9 @@ class ShipmentManifestingRequest implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $attributeMap = [
-        'profile' => 'profile',
-        'shipment_numbers' => 'shipmentNumbers',
-        'billing_number' => 'billingNumber'
+        'shipment_no' => 'shipmentNo',
+        'sheet_no' => 'sheetNo',
+        'sstatus' => 'sstatus'
     ];
 
     /**
@@ -184,9 +184,9 @@ class ShipmentManifestingRequest implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $setters = [
-        'profile' => 'setProfile',
-        'shipment_numbers' => 'setShipmentNumbers',
-        'billing_number' => 'setBillingNumber'
+        'shipment_no' => 'setShipmentNo',
+        'sheet_no' => 'setSheetNo',
+        'sstatus' => 'setSstatus'
     ];
 
     /**
@@ -195,9 +195,9 @@ class ShipmentManifestingRequest implements ModelInterface, ArrayAccess, JsonSer
      * @var array<string, string>
      */
     protected static array $getters = [
-        'profile' => 'getProfile',
-        'shipment_numbers' => 'getShipmentNumbers',
-        'billing_number' => 'getBillingNumber'
+        'shipment_no' => 'getShipmentNo',
+        'sheet_no' => 'getSheetNo',
+        'sstatus' => 'getSstatus'
     ];
 
     /**
@@ -256,9 +256,9 @@ class ShipmentManifestingRequest implements ModelInterface, ArrayAccess, JsonSer
      */
     public function __construct(?array $data = null)
     {
-        $this->setIfExists('profile', $data ?? [], null);
-        $this->setIfExists('shipment_numbers', $data ?? [], null);
-        $this->setIfExists('billing_number', $data ?? [], null);
+        $this->setIfExists('shipment_no', $data ?? [], null);
+        $this->setIfExists('sheet_no', $data ?? [], null);
+        $this->setIfExists('sstatus', $data ?? [], null);
     }
 
     /**
@@ -288,25 +288,6 @@ class ShipmentManifestingRequest implements ModelInterface, ArrayAccess, JsonSer
     {
         $invalidProperties = [];
 
-        if ($this->container['profile'] === null) {
-            $invalidProperties[] = "'profile' can't be null";
-        }
-        if ((mb_strlen($this->container['profile']) > 35)) {
-            $invalidProperties[] = "invalid value for 'profile', the character length must be smaller than or equal to 35.";
-        }
-
-        if ((mb_strlen($this->container['profile']) < 0)) {
-            $invalidProperties[] = "invalid value for 'profile', the character length must be bigger than or equal to 0.";
-        }
-
-        if (!is_null($this->container['shipment_numbers']) && (count($this->container['shipment_numbers']) > 30)) {
-            $invalidProperties[] = "invalid value for 'shipment_numbers', number of items must be less than or equal to 30.";
-        }
-
-        if (!is_null($this->container['shipment_numbers']) && (count($this->container['shipment_numbers']) < 1)) {
-            $invalidProperties[] = "invalid value for 'shipment_numbers', number of items must be greater than or equal to 1.";
-        }
-
         return $invalidProperties;
     }
 
@@ -323,96 +304,82 @@ class ShipmentManifestingRequest implements ModelInterface, ArrayAccess, JsonSer
 
 
     /**
-     * Gets profile
-     *
-     * @return string
-     */
-    public function getProfile(): string
-    {
-        return $this->container['profile'];
-    }
-
-    /**
-     * Sets profile
-     *
-     * @param string $profile profile
-     *
-     * @return $this
-     */
-    public function setProfile(string $profile): static
-    {
-        if (is_null($profile)) {
-            throw new InvalidArgumentException('non-nullable profile cannot be null');
-        }
-        if ((mb_strlen($profile) > 35)) {
-            throw new InvalidArgumentException('invalid length for $profile when calling ShipmentManifestingRequest., must be smaller than or equal to 35.');
-        }
-        if ((mb_strlen($profile) < 0)) {
-            throw new InvalidArgumentException('invalid length for $profile when calling ShipmentManifestingRequest., must be bigger than or equal to 0.');
-        }
-
-        $this->container['profile'] = $profile;
-
-        return $this;
-    }
-
-    /**
-     * Gets shipment_numbers
-     *
-     * @return string[]|null
-     */
-    public function getShipmentNumbers(): ?array
-    {
-        return $this->container['shipment_numbers'];
-    }
-
-    /**
-     * Sets shipment_numbers
-     *
-     * @param string[]|null $shipment_numbers List of shipment IDs for manifesting.
-     *
-     * @return $this
-     */
-    public function setShipmentNumbers(?array $shipment_numbers): static
-    {
-        if (is_null($shipment_numbers)) {
-            throw new InvalidArgumentException('non-nullable shipment_numbers cannot be null');
-        }
-
-        if ((count($shipment_numbers) > 30)) {
-            throw new InvalidArgumentException('invalid value for $shipment_numbers when calling ShipmentManifestingRequest., number of items must be less than or equal to 30.');
-        }
-        if ((count($shipment_numbers) < 1)) {
-            throw new InvalidArgumentException('invalid length for $shipment_numbers when calling ShipmentManifestingRequest., number of items must be greater than or equal to 1.');
-        }
-        $this->container['shipment_numbers'] = $shipment_numbers;
-
-        return $this;
-    }
-
-    /**
-     * Gets billing_number
+     * Gets shipment_no
      *
      * @return string|null
      */
-    public function getBillingNumber(): ?string
+    public function getShipmentNo(): ?string
     {
-        return $this->container['billing_number'];
+        return $this->container['shipment_no'];
     }
 
     /**
-     * Sets billing_number
+     * Sets shipment_no
      *
-     * @param string|null $billing_number Customer billingNumber number.
+     * @param string|null $shipment_no shipment_no
      *
      * @return $this
      */
-    public function setBillingNumber(?string $billing_number): static
+    public function setShipmentNo(?string $shipment_no): static
     {
-        if (is_null($billing_number)) {
-            throw new InvalidArgumentException('non-nullable billing_number cannot be null');
+        if (is_null($shipment_no)) {
+            throw new InvalidArgumentException('non-nullable shipment_no cannot be null');
         }
-        $this->container['billing_number'] = $billing_number;
+        $this->container['shipment_no'] = $shipment_no;
+
+        return $this;
+    }
+
+    /**
+     * Gets sheet_no
+     *
+     * @return string|null
+     */
+    public function getSheetNo(): ?string
+    {
+        return $this->container['sheet_no'];
+    }
+
+    /**
+     * Sets sheet_no
+     *
+     * @param string|null $sheet_no sheet_no
+     *
+     * @return $this
+     */
+    public function setSheetNo(?string $sheet_no): static
+    {
+        if (is_null($sheet_no)) {
+            throw new InvalidArgumentException('non-nullable sheet_no cannot be null');
+        }
+        $this->container['sheet_no'] = $sheet_no;
+
+        return $this;
+    }
+
+    /**
+     * Gets sstatus
+     *
+     * @return \Dhl\Rest\Shipping\Model\RequestStatus|null
+     */
+    public function getSstatus(): ?\Dhl\Rest\Shipping\Model\RequestStatus
+    {
+        return $this->container['sstatus'];
+    }
+
+    /**
+     * Sets sstatus
+     *
+     * @param \Dhl\Rest\Shipping\Model\RequestStatus|null $sstatus sstatus
+     *
+     * @return $this
+     */
+    public function setSstatus(?\Dhl\Rest\Shipping\Model\RequestStatus $sstatus): static
+    {
+        if (is_null($sstatus)) {
+            throw new InvalidArgumentException('non-nullable sstatus cannot be null');
+        }
+        $this->container['sstatus'] = $sstatus;
 
         return $this;
     }

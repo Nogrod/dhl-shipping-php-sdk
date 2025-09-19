@@ -3,7 +3,7 @@ info:
   title: Parcel DE Shipping API (Post & Parcel Germany)
   description: >
     Note: This is the specification of the DPDHL Group Parcel DE Shipping API for Post & Parcel Germany. This REST web service allows business customers to create shipping labels on demand.
-  version: 2.1.12
+  version: 2.1.13
 servers:
   - url: https://api-eu.dhl.com/parcel/de/shipping/v2
     description: Productive Server
@@ -48,6 +48,7 @@ paths:
       description: >
           Public download URL for shipment labels and documents. The URL is provided in the response of the POST /orders or GET /orders resources. The document is identified via the token query parameter. There is no additional authorization, the resource URL can be shared. Please protect the URL as needed. The call returns a PDF label.
       operationId: getLabel
+      security: []   # No auth
       parameters:
         - name: token
           in: query
@@ -57,14 +58,12 @@ paths:
             type: string
       responses:
         '200':
-          description: OK
+          description: Returns PDF file
           content:
             application/pdf:
               schema:
-                $ref: '#/components/schemas/LabelDataResponse'
-            application/json:
-              schema:
-                $ref: '#/components/schemas/LabelDataResponse'
+                type: string
+                format: binary
         '404':
           $ref: '#/components/responses/Unauthorized'
         '429':
@@ -667,6 +666,11 @@ components:
           minLength: 0
           type: string
           description: Routing code of the consignee address
+        returnRoutingCode:           
+          maxLength: 35           
+          minLength: 0           
+          type: string           
+          description: Routing code of the return address   
         returnShipmentNo:
           maxLength: 50
           minLength: 0
@@ -716,45 +720,6 @@ components:
           description: The validation state resulting from the error.
           example: Error
       description: Representation of a validation message of a shipment container containing the most important information.
-    GetManifestData:
-      type: object
-      properties:
-        b64:
-          type: array
-          description: The encoded byte stream
-          items:
-            type: string
-            description: The encoded byte stream
-            format: byte
-        zpl2:
-          type: string
-          description: The document in zpl encoding
-        url:
-          type: string
-          description: URL reference to download document
-          example: www.dhl.de/download/myobscurelink?label.png
-        fileFormat:
-          type: string
-          description: format of the encoded bytes
-          example: PDF
-          enum:
-            - ZPL2
-            - PDF
-        printFormat:
-          type: string
-          description: The print format used
-          example: 910-300-700
-          enum:
-            - A4-PT
-            - A4
-            - 910-300-700
-            - 910-300-700-oZ/oz
-            - 910-300-300
-            - 910-300-300-oz
-            - 910-300-710
-            - 910-300-600/610
-            - 910-300-400/410
-            - 100x70mm              
     SingleManifestResponse:
       type: object
       properties:
@@ -763,7 +728,35 @@ components:
         manifestDate:
           type: string
         manifest:
-          $ref: '#/components/schemas/GetManifestData'
+          type: array
+          items:
+            $ref: '#/components/schemas/Document'
+        sheetNo:
+          type: array
+          items:
+            $ref: '#/components/schemas/BillingNoToSheetNo'
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/ShipmentNoToSheetNo'
+    BillingNoToSheetNo:
+      type: object
+      properties:
+        billingNumber:
+          type: string
+        sheetNo:
+          type: string
+      description: Mapping between billing number and sheet number  
+    ShipmentNoToSheetNo:
+      type: object
+      properties:
+        shipmentNo:
+          type: string
+        sheetNo:
+          type: string
+        sstatus:
+          $ref: '#/components/schemas/RequestStatus'        
+      description: Mapping between shipment number and sheet number
     MultipleManifestResponse:
       type: object
       properties:
@@ -925,7 +918,7 @@ components:
           maxLength: 60
           minLength: 1
           type: string
-          description: Additional information that is positioned either behind or below addressStreet on international shipment labels. Where exactly it is printed on the label depends on the country.                                                                                                                                                                                                   
+          description: Additional information that is positioned either behind or below addressStreet on international shipment labels. Where exactly it is printed on the label depends on the country.
           example: 3. Etage
         additionalAddressInformation2:
           maxLength: 60
@@ -1005,11 +998,8 @@ components:
           type: string
           description: Aka 'Terms of Trade' aka 'Frankatur'. The attribute is exclusively used for the product Europaket (V54EPAK). DDU is deprecated (use DAP instead).
           enum:
-            - DDU
             - DAP
             - DDP
-            - DDX
-            - DXV
         permitNo:
           maxLength: 30
           minLength: 0
@@ -1030,12 +1020,12 @@ components:
         postalCharges:
           allOf:
             - $ref: '#/components/schemas/Value'
-          description: Postal charges that have been charged to the recipient. The information must match the information on the invoice. Postal charges are added to the customs value which is the basis for the calculation of import duties. Since 1.1.2021 this information is mandatory according to requirements of the Universal Postal Union. The currency of the postal charges is used throughout the customs declaration form. The currency details of the individual goods items are overwritten by the currency details of the postal charges.
+          description: Postal charges that have been charged to the recipient. The information must match the information on the invoice. Postal charges are added to the customs value which is the basis for the calculation of import duties. Since 1.1.2021 this information is mandatory according to requirements of the Universal Postal Union. The currency of the postal charges is used throughout the customs declaration form. The currency details of the individual goods items and the currency of the postal charges must match. Otherwise no shipping label will be created.
         officeOfOrigin:
           maxLength: 35
           minLength: 0
           type: string
-          description: Optional. Will appear on CN23.
+          description: Deprecated (do not use anymore). Will appear on CN23.
         shipperCustomsRef:
           description: "Optional. The customs reference is used by customs authorities to identify economics operators an/or other persons involved. With the given reference, granted authorizations and/or relevant processes in customs clearance an/or taxation can be taken into account. Aka Zoll-Nummer or EORI-Number but dependent on destination."
           type: string
@@ -1210,22 +1200,31 @@ components:
             pattern: ^[0-9A-Za-z]+([ -]?[0-9A-Za-z]+)*$
             type: string
             description: Postal code of the P.O. Box (Postfach) location
-        description: Alternative destination - P.O. Box (Postfach)    
+        description: Alternative destination - P.O. Box (Postfach)
+    Product:
+      type: string
+      description: |-
+        Determines the DHL Paket product to be used.
+ 
+        * V01PAK: DHL PAKET;
+        * V53WPAK: DHL PAKET International;
+        * V54EPAK: DHL Europaket;
+        * V62WP: Warenpost (will be replaced by DHL Kleinpaket from 1.1.2025);
+        * V62KP: DHL Kleinpaket;
+        * V66WPI: Warenpost International
+      example: V01PAK
+      enum:
+        - V01PAK
+        - V53WPAK
+        - V54EPAK
+        - V62WP
+        - V62KP
+        - V66WPI
     Shipment:
       type: object
       properties:
         product:
-          type: string
-          description: |-
-            Determines the DHL Paket product to be used.
- 
-            * V01PAK: DHL PAKET;
-            * V53WPAK: DHL PAKET International;
-            * V54EPAK: DHL Europaket;
-            * V62WP: Warenpost (will be replaced by DHL Kleinpaket from 1.1.2025);
-            * V62KP: DHL Kleinpaket;
-            * V66WPI: Warenpost International
-          example: V01PAK
+          $ref: '#/components/schemas/Product'
         billingNumber:
           pattern: \w{10}\d{2}\w{2}
           type: string
@@ -1237,6 +1236,7 @@ components:
           type: string
           description: A reference number that the user can assign for better association purposes. It appears on shipment labels. To use the reference number for tracking purposes, it should be at least 8 characters long and unique.
         costCenter:
+          maxLength: 50
           type: string
           description: Textfield that appears on the shipment label. It cannot be used to search for the shipment.
         creationSoftware:
@@ -1431,6 +1431,10 @@ components:
           type: string
           description: 'Undeliverable domestic shipment can be forwarded and held at retail. Notification to email (fallback: consignee email) will be used.'
           example: max.mustermann@example.com
+        goGreenPlus:
+          type: boolean
+          description: 'GoGreen Plus enables sustainable shipping by investing in measures to reduce greenhouse gas emissions at DHL.'
+          example: true
         dhlRetoure:
           $ref: '#/components/schemas/VASDhlRetoure'
         postalDeliveryDutyPaid:
@@ -1439,6 +1443,8 @@ components:
           example: true
       description: Value added services. Please note that services are specific to products and geographies and/or may require individual setup and billing numbers. Please test and contact your account representative in case of questions.
     VASCashOnDelivery:
+      required:
+        - transferNote1
       type: object
       properties:
         amount:
@@ -1473,6 +1479,10 @@ components:
           type: string
         returnAddress:
           $ref: '#/components/schemas/ContactAddress'
+        goGreenPlus:
+          type: boolean
+          description: 'GoGreen Plus enables sustainable shipping by investing in measures to reduce greenhouse gas emissions at DHL.'
+          example: true
       description: Requests return label (aka 'retoure') to be provided. Also requires returnAddress and return billing number. Neither weight nor dimension need to be specified for the retoure (flat rate service).
     VASIdentCheck:
       required:
@@ -2026,7 +2036,6 @@ components:
               addressStreet: Museumstraat
               addressHouse: "1"
               additionalAddressInformation1: 2. Floor
-                                                     
               postalCode: "1071 AA"
               city: Amsterdam
               country: NLD
@@ -2062,7 +2071,6 @@ components:
               name1: Joe Black
               addressStreet: 10 Downing Street
               additionalAddressInformation1: 2. Floor
-                                                     
               postalCode: "SW1A 1AA"
               city: London
               country: GBR
@@ -2150,7 +2158,6 @@ components:
                 name1: Joe Black
                 addressStreet: 42 Street
                 additionalAddressInformation1: 2. Floor
-                                                       
                 postalCode: SW1A 1AA
                 city: London
                 country: GBR
