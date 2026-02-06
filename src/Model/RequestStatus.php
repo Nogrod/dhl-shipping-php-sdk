@@ -61,7 +61,6 @@ class RequestStatus implements ModelInterface, ArrayAccess, JsonSerializable
       */
     protected static array $openAPITypes = [
         'title' => 'string',
-        'status_code' => 'int',
         'status' => 'int',
         'instance' => 'string',
         'detail' => 'string'
@@ -74,7 +73,6 @@ class RequestStatus implements ModelInterface, ArrayAccess, JsonSerializable
       */
     protected static array $openAPIFormats = [
         'title' => null,
-        'status_code' => 'int32',
         'status' => 'int32',
         'instance' => null,
         'detail' => null
@@ -87,7 +85,6 @@ class RequestStatus implements ModelInterface, ArrayAccess, JsonSerializable
       */
     protected static array $openAPINullables = [
         'title' => false,
-        'status_code' => false,
         'status' => false,
         'instance' => false,
         'detail' => false
@@ -180,7 +177,6 @@ class RequestStatus implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $attributeMap = [
         'title' => 'title',
-        'status_code' => 'statusCode',
         'status' => 'status',
         'instance' => 'instance',
         'detail' => 'detail'
@@ -193,7 +189,6 @@ class RequestStatus implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $setters = [
         'title' => 'setTitle',
-        'status_code' => 'setStatusCode',
         'status' => 'setStatus',
         'instance' => 'setInstance',
         'detail' => 'setDetail'
@@ -206,7 +201,6 @@ class RequestStatus implements ModelInterface, ArrayAccess, JsonSerializable
      */
     protected static array $getters = [
         'title' => 'getTitle',
-        'status_code' => 'getStatusCode',
         'status' => 'getStatus',
         'instance' => 'getInstance',
         'detail' => 'getDetail'
@@ -269,7 +263,6 @@ class RequestStatus implements ModelInterface, ArrayAccess, JsonSerializable
     public function __construct(?array $data = null)
     {
         $this->setIfExists('title', $data ?? [], null);
-        $this->setIfExists('status_code', $data ?? [], null);
         $this->setIfExists('status', $data ?? [], null);
         $this->setIfExists('instance', $data ?? [], null);
         $this->setIfExists('detail', $data ?? [], null);
@@ -304,9 +297,6 @@ class RequestStatus implements ModelInterface, ArrayAccess, JsonSerializable
 
         if ($this->container['title'] === null) {
             $invalidProperties[] = "'title' can't be null";
-        }
-        if ($this->container['status_code'] === null) {
-            $invalidProperties[] = "'status_code' can't be null";
         }
         if (!is_null($this->container['detail']) && (mb_strlen($this->container['detail']) < 0)) {
             $invalidProperties[] = "invalid value for 'detail', the character length must be bigger than or equal to 0.";
@@ -350,33 +340,6 @@ class RequestStatus implements ModelInterface, ArrayAccess, JsonSerializable
             throw new InvalidArgumentException('non-nullable title cannot be null');
         }
         $this->container['title'] = $title;
-
-        return $this;
-    }
-
-    /**
-     * Gets status_code
-     *
-     * @return int
-     */
-    public function getStatusCode(): int
-    {
-        return $this->container['status_code'];
-    }
-
-    /**
-     * Sets status_code
-     *
-     * @param int $status_code The status code of the response. Usually, but not necessarliy the HTTP status code. Same as attribut \"status\" but deprecated. Do not use. Will be removed in the next major version.
-     *
-     * @return $this
-     */
-    public function setStatusCode(int $status_code): static
-    {
-        if (is_null($status_code)) {
-            throw new InvalidArgumentException('non-nullable status_code cannot be null');
-        }
-        $this->container['status_code'] = $status_code;
 
         return $this;
     }

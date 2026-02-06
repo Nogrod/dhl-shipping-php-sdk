@@ -615,11 +615,6 @@ components:
         title:
           type: string
           example: ok
-        statusCode:
-          description: The status code of the response. Usually, but not necessarliy the HTTP status code. Same as attribut "status" but deprecated. Do not use. Will be removed in the next major version.        
-          type: integer
-          format: int32
-          example: 200
         status:           
           description: The status code of the response. Usually, but not necessarliy the HTTP status code.                   
           type: integer           
