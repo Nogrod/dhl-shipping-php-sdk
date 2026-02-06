@@ -629,7 +629,6 @@ components:
           type: string
           description: A URI reference that identifies the specific occurrence of the problem.          
         detail:
-          maxLength: 80
           minLength: 0
           type: string
           example: The Webservice call ran successfully.
