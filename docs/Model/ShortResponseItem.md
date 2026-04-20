@@ -1,4 +1,4 @@
-# # ShortResponseItem
+# ShortResponseItem
 
 ## Properties
 

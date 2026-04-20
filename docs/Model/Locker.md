@@ -1,4 +1,4 @@
-# # Locker
+# Locker
 
 ## Properties
 

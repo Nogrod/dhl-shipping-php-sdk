@@ -1,4 +1,4 @@
-# # ShipmentDetails
+# ShipmentDetails
 
 ## Properties
 

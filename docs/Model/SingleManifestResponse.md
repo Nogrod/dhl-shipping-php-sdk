@@ -1,4 +1,4 @@
-# # SingleManifestResponse
+# SingleManifestResponse
 
 ## Properties
 

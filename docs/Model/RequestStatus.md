@@ -1,4 +1,4 @@
-# # RequestStatus
+# RequestStatus
 
 ## Properties
 

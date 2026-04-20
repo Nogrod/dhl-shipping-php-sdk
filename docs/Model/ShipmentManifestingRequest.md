@@ -1,4 +1,4 @@
-# # ShipmentManifestingRequest
+# ShipmentManifestingRequest
 
 ## Properties
 

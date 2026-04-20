@@ -1,4 +1,4 @@
-# # VASCashOnDelivery
+# VASCashOnDelivery
 
 ## Properties
 

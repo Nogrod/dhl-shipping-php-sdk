@@ -1,4 +1,4 @@
-# # ShipperReference
+# ShipperReference
 
 ## Properties
 

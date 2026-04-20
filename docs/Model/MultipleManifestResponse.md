@@ -1,4 +1,4 @@
-# # MultipleManifestResponse
+# MultipleManifestResponse
 
 ## Properties
 

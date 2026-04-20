@@ -1,4 +1,4 @@
-# # ServiceInformationAmp
+# ServiceInformationAmp
 
 ## Properties
 

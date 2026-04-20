@@ -1,4 +1,4 @@
-# # Dimensions
+# Dimensions
 
 ## Properties
 

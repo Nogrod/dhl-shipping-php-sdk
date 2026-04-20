@@ -1,4 +1,4 @@
-# # ServiceInformation
+# ServiceInformation
 
 ## Properties
 

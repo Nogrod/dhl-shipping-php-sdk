@@ -1,4 +1,4 @@
-# # ValidationMessageItem
+# ValidationMessageItem
 
 ## Properties
 
