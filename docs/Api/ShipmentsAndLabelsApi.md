@@ -13,7 +13,7 @@ All URIs are relative to https://api-eu.dhl.com/parcel/de/shipping/v2, except if
 ## `createOrders()`
 
 ```php
-createOrders($shipment_order_request, $accept_language, $validate, $must_encode, $include_docs, $doc_format, $print_format, $retoure_print_format, $combine): \Dhl\Rest\Shipping\Model\LabelDataResponse
+createOrders($shipment_order_request, $accept_language, $validate, $must_encode, $include_docs, $doc_format, $print_format, $retoure_print_format, $combine, $print_dhl_logo, $print_dhl_logo_retoure): \Dhl\Rest\Shipping\Model\LabelDataResponse
 ```
 
 Create one or more shipments and their documents. (This is the primary call of the API.)
@@ -56,9 +56,11 @@ $doc_format = 'PDF'; // string | **Defines** the **printable** document format t
 $print_format = 'print_format_example'; // string | **Defines** the print medium for the shipping label. The different option vary from standard paper sizes DIN A4 and DIN A5 to specific label print formats.  Specific laser print formats using DIN A5 blanks are: * 910-300-600(-oz) (105 x 205mm) * 910-300-300(-oz) (105 x 148mm)  Specific laser print formats **not** using a DIN A5 blank: * 910-300-610 (105 x 208mm) * 100x70mm  Specific thermal print formats: * 910-300-600 (103 x 199mm) * 910-300-400 (103 x 150mm) * 100x70mm  Please use the different formats as follows. If you do not set the parameter the settings of DHL costumer portal account will be used as default.
 $retoure_print_format = 'retoure_print_format_example'; // string | **Defines** the print medium for the return shipping label. This parameter is only usable, if you do not use **combined printing**. The different option vary from standard paper sizes DIN A4 and DIN A5 to specific label print formats.   Specific laser print formats using DIN A5 blanks are: * 910-300-600(-oz) (105 x 205mm) * 910-300-300(-oz) (105 x 148mm)  Specific laser print formats **not** using a DIN A5 blank: * 910-300-610 (105 x 208mm) * 100x70mm  Specific thermal print formats: * 910-300-600 (103 x 199mm) * 910-300-400 (103 x 150mm) * 100x70mm  Please use the different formats as follows. If you do not set the parameter the settings of DHL costumer portal account will be used as default.
 $combine = true; // bool | If set, label and return label for one shipment will be printed as single PDF document with possibly multiple pages. Else, those two labels come as separate documents. The option does not affect customs documents and COD labels.
+$print_dhl_logo = True; // bool | Defines whether the DHL Logo should be included on the shipping label. **Does not affect return labels**.If not provided, default from user profile will be used.
+$print_dhl_logo_retoure = True; // bool | Defines whether the DHL Logo should be included on the generated **return/retoure** label. Does not affect non-return labels.If not provided, default from user profile will be used.
 
 try {
-    $result = $apiInstance->createOrders($shipment_order_request, $accept_language, $validate, $must_encode, $include_docs, $doc_format, $print_format, $retoure_print_format, $combine);
+    $result = $apiInstance->createOrders($shipment_order_request, $accept_language, $validate, $must_encode, $include_docs, $doc_format, $print_format, $retoure_print_format, $combine, $print_dhl_logo, $print_dhl_logo_retoure);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentsAndLabelsApi->createOrders: ', $e->getMessage(), PHP_EOL;
@@ -78,6 +80,8 @@ try {
 | **print_format** | **string**| **Defines** the print medium for the shipping label. The different option vary from standard paper sizes DIN A4 and DIN A5 to specific label print formats.  Specific laser print formats using DIN A5 blanks are: * 910-300-600(-oz) (105 x 205mm) * 910-300-300(-oz) (105 x 148mm)  Specific laser print formats **not** using a DIN A5 blank: * 910-300-610 (105 x 208mm) * 100x70mm  Specific thermal print formats: * 910-300-600 (103 x 199mm) * 910-300-400 (103 x 150mm) * 100x70mm  Please use the different formats as follows. If you do not set the parameter the settings of DHL costumer portal account will be used as default. | [optional] |
 | **retoure_print_format** | **string**| **Defines** the print medium for the return shipping label. This parameter is only usable, if you do not use **combined printing**. The different option vary from standard paper sizes DIN A4 and DIN A5 to specific label print formats.   Specific laser print formats using DIN A5 blanks are: * 910-300-600(-oz) (105 x 205mm) * 910-300-300(-oz) (105 x 148mm)  Specific laser print formats **not** using a DIN A5 blank: * 910-300-610 (105 x 208mm) * 100x70mm  Specific thermal print formats: * 910-300-600 (103 x 199mm) * 910-300-400 (103 x 150mm) * 100x70mm  Please use the different formats as follows. If you do not set the parameter the settings of DHL costumer portal account will be used as default. | [optional] |
 | **combine** | **bool**| If set, label and return label for one shipment will be printed as single PDF document with possibly multiple pages. Else, those two labels come as separate documents. The option does not affect customs documents and COD labels. | [optional] [default to true] |
+| **print_dhl_logo** | **bool**| Defines whether the DHL Logo should be included on the shipping label. **Does not affect return labels**.If not provided, default from user profile will be used. | [optional] |
+| **print_dhl_logo_retoure** | **bool**| Defines whether the DHL Logo should be included on the generated **return/retoure** label. Does not affect non-return labels.If not provided, default from user profile will be used. | [optional] |
 
 ### Return type
 
@@ -155,7 +159,7 @@ No authorization required
 ## `getOrder()`
 
 ```php
-getOrder($shipment, $accept_language, $doc_format, $print_format, $retoure_print_format, $include_docs, $combine): \Dhl\Rest\Shipping\Model\LabelDataResponse
+getOrder($shipment, $accept_language, $doc_format, $print_format, $retoure_print_format, $include_docs, $combine, $print_dhl_logo, $print_dhl_logo_retoure): \Dhl\Rest\Shipping\Model\LabelDataResponse
 ```
 
 Retrieve shipment documents - labels and customs documents
@@ -196,9 +200,11 @@ $print_format = 'print_format_example'; // string | **Defines** the print medium
 $retoure_print_format = 'retoure_print_format_example'; // string | **Defines** the print medium for the return shipping label. This parameter is only usable, if you do not use **combined printing**. The different option vary from standard papersizes DIN A4 and DIN A5 to specific label print formats.   Specific laser print formats using DIN A5 blanks are:  * 910-300-600(-oz) (105 x 205mm) * 910-300-300(-oz) (105 x 148mm)  Specific laser print formats **not** using a DIN A5 blank:  * 910-300-610 (105 x 208mm) * 100x70mm  Specific thermal print formats:  * 910-300-600 (103 x 199mm) * 910-300-400 (103 x 150mm) * 100x70mm  Please use the different formats as follows. If you do not set the parameter the settings of DHL costumer portal account will be used as default.
 $include_docs = 'include'; // string | Legacy name **labelResponseType**. Shipping labels and further shipment documents can be:  * __include__: included as base64 encoded data in the response (default)  * __URL__: provided as URL reference.  Default is include the base64 encoded labels.
 $combine = true; // bool | If set, label and return label for one shipment will be printed as single PDF document with possibly multiple pages. Else, those two labels come as separate documents. The option does not affect customs documents and COD labels.
+$print_dhl_logo = True; // bool | Defines whether the DHL Logo should be included on the generated label. **Does not affect return labels**.If not provided, default from user profile will be used.
+$print_dhl_logo_retoure = True; // bool | Defines whether the DHL Logo should be included on the generated **return/retoure** label. Does not affect non-return labels. If not provided, default from user profile will be used.
 
 try {
-    $result = $apiInstance->getOrder($shipment, $accept_language, $doc_format, $print_format, $retoure_print_format, $include_docs, $combine);
+    $result = $apiInstance->getOrder($shipment, $accept_language, $doc_format, $print_format, $retoure_print_format, $include_docs, $combine, $print_dhl_logo, $print_dhl_logo_retoure);
     print_r($result);
 } catch (Exception $e) {
     echo 'Exception when calling ShipmentsAndLabelsApi->getOrder: ', $e->getMessage(), PHP_EOL;
@@ -216,6 +222,8 @@ try {
 | **retoure_print_format** | **string**| **Defines** the print medium for the return shipping label. This parameter is only usable, if you do not use **combined printing**. The different option vary from standard papersizes DIN A4 and DIN A5 to specific label print formats.   Specific laser print formats using DIN A5 blanks are:  * 910-300-600(-oz) (105 x 205mm) * 910-300-300(-oz) (105 x 148mm)  Specific laser print formats **not** using a DIN A5 blank:  * 910-300-610 (105 x 208mm) * 100x70mm  Specific thermal print formats:  * 910-300-600 (103 x 199mm) * 910-300-400 (103 x 150mm) * 100x70mm  Please use the different formats as follows. If you do not set the parameter the settings of DHL costumer portal account will be used as default. | [optional] |
 | **include_docs** | **string**| Legacy name **labelResponseType**. Shipping labels and further shipment documents can be:  * __include__: included as base64 encoded data in the response (default)  * __URL__: provided as URL reference.  Default is include the base64 encoded labels. | [optional] [default to &#39;include&#39;] |
 | **combine** | **bool**| If set, label and return label for one shipment will be printed as single PDF document with possibly multiple pages. Else, those two labels come as separate documents. The option does not affect customs documents and COD labels. | [optional] [default to true] |
+| **print_dhl_logo** | **bool**| Defines whether the DHL Logo should be included on the generated label. **Does not affect return labels**.If not provided, default from user profile will be used. | [optional] |
+| **print_dhl_logo_retoure** | **bool**| Defines whether the DHL Logo should be included on the generated **return/retoure** label. Does not affect non-return labels. If not provided, default from user profile will be used. | [optional] |
 
 ### Return type
 

@@ -3,7 +3,7 @@ info:
   title: Parcel DE Shipping API (Post & Parcel Germany)
   description: >
     Note: This is the specification of the DPDHL Group Parcel DE Shipping API for Post & Parcel Germany. This REST web service allows business customers to create shipping labels on demand.
-  version: 2.1.13
+  version: 2.1.14
 servers:
   - url: https://api-eu.dhl.com/parcel/de/shipping/v2
     description: Productive Server
@@ -272,6 +272,18 @@ paths:
           schema:
             type: boolean
             default: true
+        - name: printDhlLogo
+          in: query
+          description: Defines whether the DHL Logo should be included on the generated label. **Does not affect return labels**.If not provided, default from user profile will be used.
+          required: false
+          schema:
+            type: boolean
+        - name: printDhlLogoRetoure
+          in: query
+          description: Defines whether the DHL Logo should be included on the generated **return/retoure** label. Does not affect non-return labels. If not provided, default from user profile will be used.
+          required: false
+          schema:
+            type: boolean
       responses:
         '200':
           description: Success response for requests with a single shipment.
@@ -433,6 +445,18 @@ paths:
           schema:
             type: boolean
             default: true
+        - name: printDhlLogo
+          in: query
+          description: Defines whether the DHL Logo should be included on the shipping label. **Does not affect return labels**.If not provided, default from user profile will be used.
+          required: false
+          schema:
+            type: boolean
+        - name: printDhlLogoRetoure
+          in: query
+          description: Defines whether the DHL Logo should be included on the generated **return/retoure** label. Does not affect non-return labels.If not provided, default from user profile will be used.
+          required: false
+          schema:
+            type: boolean
       requestBody:
         description: Shipment order request.
         content:
@@ -644,6 +668,8 @@ components:
               label:
                 url: https://api-dev.dhl.com/parcel/de/shipping/v1-feature-order-endpoint/labels?token=x5xzrHE7ctmqPqk33k%2BKkBwbvIfYP4elMQsBFM%2BJOdiT2bmoaXXzris%2Ftz9jBtdVFLY5cCENit0Jnd9aXuxoNEXhP9PQ8tAVdPeXD26RZ6JZqF5NCJlrihrAv1%2FAOzuDPqWJLRVaRq461BpT4bcbzChAAHVg%2FHUaQAkeIkaZ8NqfcxWEQzK1AYJWczpy6sv6
                 format: PDF
+              validationMessages: []
+              uuid: 019e01f5-c97c-7386-88c6-8e9fee5037e9
           items:
             $ref: '#/components/schemas/ResponseItem'
     ResponseItem:
@@ -688,6 +714,10 @@ components:
           description: Optional validation messages attached to the shipment.
           items:
             $ref: '#/components/schemas/ValidationMessageItem'
+        uuid:
+          type: string
+          format: uuid
+          description: UUID identifying the shipment
       description: Response for a single shipment containing status, numbers and labels
       example:
         - shipmentNo: 340434310428091700
@@ -698,6 +728,8 @@ components:
           label:
             url: https://api-dev.dhl.com/parcel/de/shipping/v1-feature-order-endpoint/labels?token=x5xzrHE7ctmqPqk33k%2BKkBwbvIfYP4elMQsBFM%2BJOdiT2bmoaXXzris%2Ftz9jBtdVFLY5cCENit0Jnd9aXuxoNEXhP9PQ8tAVdPeXD26RZ6JZqF5NCJlrihrAv1%2FAOzuDPqWJLRVaRq461BpT4bcbzChAAHVg%2FHUaQAkeIkaZ8NqfcxWEQzK1AYJWczpy6sv6
             format: PDF
+          validationMessages: []
+          uuid: 019e01f5-c97c-7386-88c6-8e9fee5037e9
     ValidationMessageItem:
       type: object
       properties:
@@ -900,7 +932,7 @@ components:
           maxLength: 50
           minLength: 1
           type: string
-          description: Line 1 of the street address. This is just the street name. Can also include house number.
+          description: Line 1 of the street address. This is just the street name. Can also include house number. If the house number is included Street and house number must be separated by a space to avoid validation errors.
           example: Hauptstrasse
         addressHouse:
           maxLength: 10
@@ -925,7 +957,7 @@ components:
           minLength: 3
           pattern: ^[0-9A-Za-z]+([ -]?[0-9A-Za-z]+)*$
           type: string
-          description: Mandatory for all countries but Ireland that use a postal code system.
+          description: Mandatory for all countries that use a postal code system.
           example: '53113'
         city:
           maxLength: 40

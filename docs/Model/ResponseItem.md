@@ -15,5 +15,6 @@ Name | Type | Description | Notes
 **customs_doc** | [**\Dhl\Rest\Shipping\Model\Document**](Document.md) |  | [optional]
 **cod_label** | [**\Dhl\Rest\Shipping\Model\Document**](Document.md) |  | [optional]
 **validation_messages** | [**\Dhl\Rest\Shipping\Model\ValidationMessageItem[]**](ValidationMessageItem.md) | Optional validation messages attached to the shipment. | [optional]
+**uuid** | **string** | UUID identifying the shipment | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

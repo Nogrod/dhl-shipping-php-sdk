@@ -8,7 +8,7 @@ Name | Type | Description | Notes
 **name2** | **string** | An optional, additional line of name information | [optional]
 **name3** | **string** | An optional, additional line of name information | [optional]
 **dispatching_information** | **string** | An optional, additional line of address. It is printed on the shipping label for international shipments to the following countries only BEL, CZE, NLD. It is positioned below name3 on the label. | [optional]
-**address_street** | **string** | Line 1 of the street address. This is just the street name. Can also include house number. | [optional]
+**address_street** | **string** | Line 1 of the street address. This is just the street name. Can also include house number. If the house number is included Street and house number must be separated by a space to avoid validation errors. | [optional]
 **address_house** | **string** | Line 1 of the street address. This is just the house number. Can be added to street name instead. | [optional]
 **additional_address_information1** | **string** | Additional information that is positioned either behind or below addressStreet on international shipment labels. Where exactly it is printed on the label depends on the country. | [optional]
 **additional_address_information2** | **string** | Additional information that is positioned either behind or below addressStreet on international shipment labels. It is printed on shipping labels to the following countries only AUT, CHN, DNK, GBR, HRV, LTU, PRT, ROU, RUS. Where exactly it is printed on the label depends on the country. | [optional]
