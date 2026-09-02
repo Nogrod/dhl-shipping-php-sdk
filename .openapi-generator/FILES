@@ -52,6 +52,7 @@ src/ApiException.php
 src/Configuration.php
 src/FormDataProcessor.php
 src/HeaderSelector.php
+src/Model/AnyOfInterface.php
 src/Model/BankAccount.php
 src/Model/BillingNoToSheetNo.php
 src/Model/Commodity.php
@@ -65,6 +66,7 @@ src/Model/LabelDataResponse.php
 src/Model/Locker.php
 src/Model/ModelInterface.php
 src/Model/MultipleManifestResponse.php
+src/Model/OneOfInterface.php
 src/Model/POBox.php
 src/Model/PostOffice.php
 src/Model/Product.php

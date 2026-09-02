@@ -633,7 +633,6 @@ components:
       type: object
       description: General status description for the attached response or response item.
       required:
-        - statusCode
         - title
       properties:
         title:
@@ -902,6 +901,11 @@ components:
         - $ref: '#/components/schemas/PostOffice'
         - $ref: '#/components/schemas/POBox'
     ContactAddress:
+      required:
+        - addressStreet
+        - city
+        - country
+        - name1
       type: object
       properties:
         name1:
@@ -1107,6 +1111,12 @@ components:
           example: 15
       description: Physical dimensions (aka 'Gurtmass') of the parcel. If you provide the dimension information, all attributes need to be provided. You cannot provide just the height, for example. If you provide length, width, and height in millimeters, they will be rounded to full cm.
     Locker:
+      required:
+        - city
+        - lockerID
+        - name
+        - postNumber
+        - postalCode
       type: object
       properties:
         name:
@@ -1141,6 +1151,11 @@ components:
           type: string
       description: Only usable for German Packstation, international lockers cannot be addressed directly. If your customer wishes for international delivery to a droppoint, please use DHL Parcel International (V53WPAK) with the delivery type "Closest Droppoint".
     PostOffice:
+      required:
+        - city
+        - name
+        - postalCode
+        - retailID
       type: object
       properties:
         name:
@@ -1183,6 +1198,11 @@ components:
           type: string
       description: Only usable for German post offices or retail outlets (Paketshops), international postOffices or retail outlets cannot be addressed directly. If your customer wishes for international delivery to a droppoint, please use DHL Parcel International (V53WPAK) with the delivery type "Closest Droppoint".
     POBox:
+        required:
+            - name1
+            - poBoxID
+            - city
+            - postalCode
         type: object
         properties:
           name1:
@@ -1317,6 +1337,11 @@ components:
     Shipper:
       type: object
       description: Shipper information, including contact information and address.
+      required:
+        - addressStreet
+        - city
+        - country
+        - name1
       properties:
         name1:
           maxLength: 50
@@ -1378,6 +1403,8 @@ components:
     ShipperReference:
       type: object
       description: Contains a reference to the Shipper data configured in GKP(GeschÃ¤ftskundenportal - Business Costumer Portal). Can be used instead of a detailed shipper address. The shipper reference can be used to print a company logo which is configured in GKP onto the label.
+      required:
+        - shipperRef
       properties:
         shipperRef:
           maxLength: 50
