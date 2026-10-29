@@ -3,6 +3,7 @@
 .travis.yml
 README.md
 composer.json
+docs/Api/CustomsDocumentsApi.md
 docs/Api/GeneralApi.md
 docs/Api/ManifestsApi.md
 docs/Api/ShipmentsAndLabelsApi.md
@@ -13,6 +14,11 @@ docs/Model/Consignee.md
 docs/Model/ContactAddress.md
 docs/Model/Country.md
 docs/Model/CustomsDetails.md
+docs/Model/CustomsDocumentBatchResponse.md
+docs/Model/CustomsDocumentReference.md
+docs/Model/CustomsDocumentUploadItem.md
+docs/Model/CustomsDocumentValidationItem.md
+docs/Model/CustomsDocumentValidationResponse.md
 docs/Model/Dimensions.md
 docs/Model/Document.md
 docs/Model/LabelDataResponse.md
@@ -45,6 +51,7 @@ docs/Model/Value.md
 docs/Model/Weight.md
 git_push.sh
 phpunit.xml.dist
+src/Api/CustomsDocumentsApi.php
 src/Api/GeneralApi.php
 src/Api/ManifestsApi.php
 src/Api/ShipmentsAndLabelsApi.php
@@ -60,6 +67,11 @@ src/Model/Consignee.php
 src/Model/ContactAddress.php
 src/Model/Country.php
 src/Model/CustomsDetails.php
+src/Model/CustomsDocumentBatchResponse.php
+src/Model/CustomsDocumentReference.php
+src/Model/CustomsDocumentUploadItem.php
+src/Model/CustomsDocumentValidationItem.php
+src/Model/CustomsDocumentValidationResponse.php
 src/Model/Dimensions.php
 src/Model/Document.php
 src/Model/LabelDataResponse.php
@@ -93,3 +105,9 @@ src/Model/ValidationMessageItem.php
 src/Model/Value.php
 src/Model/Weight.php
 src/ObjectSerializer.php
+tests/Api/CustomsDocumentsApiTest.php
+tests/Model/CustomsDocumentBatchResponseTest.php
+tests/Model/CustomsDocumentReferenceTest.php
+tests/Model/CustomsDocumentUploadItemTest.php
+tests/Model/CustomsDocumentValidationItemTest.php
+tests/Model/CustomsDocumentValidationResponseTest.php

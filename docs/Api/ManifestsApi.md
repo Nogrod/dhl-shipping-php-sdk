@@ -46,7 +46,7 @@ $apiInstance = new Dhl\Rest\Shipping\Api\ManifestsApi(
     $config
 );
 $billing_number = 'billing_number_example'; // string | Customer billingNumber number.
-$date = 'date_example'; // string
+$date = 'date_example'; // string | Manifest date in ISO 8601 format (YYYY-MM-DD). Defaults to today.
 $include_docs = 'include'; // string | Legacy name **labelResponseType**. Shipping labels and further shipment documents can be:  * __include__: included as base64 encoded data in the response (default)  * __URL__: provided as URL reference.  Default is include the base64 encoded labels.
 $accept_language = de-DE; // string | Control the APIs response language via locale abbreviation. English (en-US) and german (de-DE) are supported. If not specified, the default is english.
 
@@ -63,7 +63,7 @@ try {
 | Name | Type | Description  | Notes |
 | ------------- | ------------- | ------------- | ------------- |
 | **billing_number** | **string**| Customer billingNumber number. | [optional] |
-| **date** | **string**|  | [optional] |
+| **date** | **string**| Manifest date in ISO 8601 format (YYYY-MM-DD). Defaults to today. | [optional] |
 | **include_docs** | **string**| Legacy name **labelResponseType**. Shipping labels and further shipment documents can be:  * __include__: included as base64 encoded data in the response (default)  * __URL__: provided as URL reference.  Default is include the base64 encoded labels. | [optional] [default to &#39;include&#39;] |
 | **accept_language** | **string**| Control the APIs response language via locale abbreviation. English (en-US) and german (de-DE) are supported. If not specified, the default is english. | [optional] |
 
@@ -121,7 +121,7 @@ $apiInstance = new Dhl\Rest\Shipping\Api\ManifestsApi(
     new GuzzleHttp\Client(),
     $config
 );
-$shipment_manifesting_request = new \Dhl\Rest\Shipping\Model\ShipmentManifestingRequest(); // \Dhl\Rest\Shipping\Model\ShipmentManifestingRequest | Manifest request taking multiple input elements
+$shipment_manifesting_request = {"profile":"STANDARD_GRUPPENPROFIL","shipmentNumbers":["340434310428091700"]}; // \Dhl\Rest\Shipping\Model\ShipmentManifestingRequest | Manifest request taking multiple input elements
 $accept_language = de-DE; // string | Control the APIs response language via locale abbreviation. English (en-US) and german (de-DE) are supported. If not specified, the default is english.
 $all = false; // bool | Specify if all applicable shipments shall be marked as being ready for shipping.
 

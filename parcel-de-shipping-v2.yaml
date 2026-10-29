@@ -3,7 +3,7 @@ info:
   title: Parcel DE Shipping API (Post & Parcel Germany)
   description: >
     Note: This is the specification of the DPDHL Group Parcel DE Shipping API for Post & Parcel Germany. This REST web service allows business customers to create shipping labels on demand.
-  version: 2.1.14
+  version: 2.2.0
 servers:
   - url: https://api-eu.dhl.com/parcel/de/shipping/v2
     description: Productive Server
@@ -17,6 +17,8 @@ tags:
     description: Order and retrieve shipment labels
   - name: Manifests
     description: Manifest shipments and retrieve daily manifest lists
+  - name: Customs Documents
+    description: Upload customs documents for paperless customs clearance
 paths:
   /: 
     get:
@@ -65,7 +67,7 @@ paths:
                 type: string
                 format: binary
         '404':
-          $ref: '#/components/responses/Unauthorized'
+          $ref: '#/components/responses/NotFound'
         '429':
           $ref: '#/components/responses/TooManyRequests'
         '500':
@@ -86,6 +88,7 @@ paths:
             type: string
         - name: date
           in: query
+          description: Manifest date in ISO 8601 format (YYYY-MM-DD). Defaults to today.
           schema:
             type: string
         - name: includeDocs
@@ -166,6 +169,19 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/ShipmentManifestingRequest'
+            examples:
+              selectedShipments:
+                summary: Manifest selected shipments
+                value:
+                  profile: STANDARD_GRUPPENPROFIL
+                  shipmentNumbers:
+                    - '340434310428091700'
+              byBillingNumber:
+                summary: Manifest all open shipments of one billing number
+                description: No list of shipment numbers is needed. All open shipments of this billing number are closed out.
+                value:
+                  profile: STANDARD_GRUPPENPROFIL
+                  billingNumber: '33333333330102'
         required: true
       responses:
         '207':
@@ -174,6 +190,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MultipleManifestResponse'
+              examples:
+                manifestedShipment:
+                  summary: One shipment closed out
+                  value:
+                    status:
+                      title: Multi-Status
+                      statusCode: 207
+                      status: 207
+                      detail: 1 of 1 shipments successfully closed
+                    items:
+                      - shipmentNo: '0034043333301020028792610'
+                        sstatus:
+                          title: OK
+                          statusCode: 200
+                          status: 200
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/MultipleManifestResponse'
@@ -185,6 +216,85 @@ paths:
           $ref: '#/components/responses/TooManyRequests'
         '500':
           $ref: '#/components/responses/InternalServerError'          
+  /customs-documents:
+    post:
+      tags:
+        - Customs Documents
+      summary: Upload customs documents for paperless customs clearance
+      description: |-
+        Uploads customs-related invoice documents (commercial invoice or proforma invoice) for international shipments.
+
+        Documents must be uploaded before shipment creation (`POST /orders`). The response contains a `batchId` which must be provided when creating the corresponding shipment.
+
+        Uploaded documents may be used for paperless customs clearance (`paperlessCustoms`) or to fulfill country-specific requirements for electronic invoice submission, where customs authorities require a digital copy of the invoice in addition to customs data and accompanying paper documents.
+
+        A `batchId` can only be used for a single shipment. Reusing a `batchId` that has already been linked to a shipment results in an error.
+
+        Only PDF documents are accepted. Each file may not exceed 1 MB and the filename must not exceed 60 characters. Up to 4 documents can be uploaded per request. Uploaded but unused documents are automatically deleted after a retention period.
+      operationId: customsDocumentsPost
+      parameters:
+        - name: Accept-Language
+          in: header
+          description: Control the APIs response language via locale abbreviation. English (en-US) and german (de-DE) are supported. If not specified, the default is english.
+          schema:
+            type: string
+          example: de-DE
+      requestBody:
+        description: One or more PDF customs documents and their metadata, submitted as multipart/form-data (documents[0].documentType, documents[0].userDefinedReference, documents[0].data, documents[1]...).
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/CustomsDocumentUploadRequest'
+            examples:
+              invoice:
+                summary: Upload a customs invoice
+                description: Attach a PDF file as documents[0].data. The placeholder below is not literal file content.
+                value:
+                  documents:
+                    - documentType: Invoice
+                      userDefinedReference: MyInvoiceForUs
+                      data: <PDF file content>
+        required: true
+      responses:
+        '201':
+          description: Customs documents accepted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomsDocumentBatchResponse'
+              examples:
+                uploadedInvoice:
+                  summary: Customs invoice accepted
+                  value:
+                    batchId: 45685f64-1234-1234-b3fc-2c963f66a123
+                    documents:
+                      - filename: invoice_2026.pdf
+                        userDefinedReference: MyInvoiceForUs
+                    validationMessages: []
+        '400':
+          description: Bad Request - one or more documents failed validation. No batchId is created.
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/CustomsDocumentValidationResponse'
+              examples:
+                invalidInvoice:
+                  summary: Customs invoice failed validation
+                  value:
+                    items:
+                      - documentType: Invoice
+                        validationMessages:
+                          - property: data
+                            validationMessage: The uploaded file is invalid.
+                            validationState: Error
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '413':
+          $ref: '#/components/responses/ContentTooLarge'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
   /orders:
     get:
       tags:
@@ -301,7 +411,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/LabelDataResponse'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/ShipmentBadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '404':
@@ -474,6 +584,18 @@ paths:
                 $ref: '#/components/examples/DHLKleinpaket'
               WarenpostInternationalWithCustoms:
                 $ref: '#/components/examples/WarenpostInternationalWithCustoms'
+              DHLPaketPackstation:
+                $ref: '#/components/examples/DHLPaketPackstation'
+              DHLPaketPostOffice:
+                $ref: '#/components/examples/DHLPaketPostOffice'
+              DHLPaketWithReturnLabel:
+                $ref: '#/components/examples/DHLPaketWithReturnLabel'
+              DHLPaketInternationalUSA:
+                $ref: '#/components/examples/DHLPaketInternationalUSA'
+              DHLPaketInternationalPaperlessCustoms:
+                $ref: '#/components/examples/DHLPaketInternationalPaperlessCustoms'
+              MultipleShipments:
+                $ref: '#/components/examples/MultipleShipments'
         required: true
       responses:
         '200':
@@ -495,7 +617,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/LabelDataResponse'
         '400':
-          $ref: '#/components/responses/BadRequest'
+          $ref: '#/components/responses/ShipmentBadRequest'
         '401':
           $ref: '#/components/responses/Unauthorized'
         '429':
@@ -528,7 +650,7 @@ paths:
           description: Shipment number that shall be canceled. If multiple shipments shall be canceled, the parameter must be added multiple times. Up to 30 shipments can be canceled at once.
           schema:
            type: string
-          example: '123456789'
+          example: '0034043333301020028792443'
       responses:
         '200':
           description: Response for requests with a single element
@@ -536,6 +658,21 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/LabelDataResponse'
+              examples:
+                canceledShipment:
+                  summary: One shipment canceled
+                  value:
+                    status:
+                      title: OK
+                      statusCode: 200
+                      status: 200
+                      detail: 1 of 1 shipment successfully canceled.
+                    items:
+                      - shipmentNo: '0034043333301020028792443'
+                        sstatus:
+                          title: OK
+                          statusCode: 200
+                          status: 200
             application/problem+json:
               schema:
                 $ref: '#/components/schemas/LabelDataResponse'
@@ -580,7 +717,7 @@ components:
             rev: 
               type: string
               description: revision
-              example: 22
+              example: '22'
         backend:
           type: object
           properties:
@@ -629,29 +766,119 @@ components:
             - 910-300-400/410
             - 100x70mm
       description: 'Encoded document. All types of labels and documents.'
+    CustomsDocumentUploadRequest:
+      type: object
+      required:
+        - documents
+      properties:
+        documents:
+          minItems: 1
+          maxItems: 1
+          type: array
+          description: List of customs documents to upload. Submitted as multipart form fields using bracket notation, e.g. documents[0].documentType, documents[0].userDefinedReference, documents[0].data, documents[1]...
+          items:
+            $ref: '#/components/schemas/CustomsDocumentUploadItem'
+      description: Multipart/form-data request body for uploading customs documents. Currently, only one document can be uploaded per request. Support for up to four documents per request is planned for a future release.
+    CustomsDocumentUploadItem:
+      required:
+        - documentType
+        - data
+      type: object
+      properties:
+        documentType:
+          type: string
+          description: Type of the customs document.
+          example: Invoice
+          enum:
+            - Invoice
+            - CN23
+        userDefinedReference:
+          maxLength: 60
+          minLength: 0
+          type: string
+          description: Optional customer-defined reference for the document, e.g. an order or file reference. Values exceeding 60 characters are truncated and result in a warning.
+          example: MyFile
+        data:
+          type: string
+          format: binary
+          description: The PDF file content. Only application/pdf is accepted. Maximum file size 1 MB, maximum filename length 60 characters.
+      description: A single customs document and its metadata.
+    CustomsDocumentBatchResponse:
+      required:
+        - batchId
+      type: object
+      properties:
+        batchId:
+          type: string
+          format: uuid
+          description: Unique identifier for this batch of uploaded customs documents. Provide this value in the ''paperlessCustoms'' service attribute of POST /orders to attach the documents to a shipment. A batchId can only be consumed by one shipment.
+          example: 45685f64-1234-1234-b3fc-2c963f66a123
+        documents:
+          type: array
+          description: The accepted documents of this batch.
+          items:
+            $ref: '#/components/schemas/CustomsDocumentReference'
+        validationMessages:
+          type: array
+          description: Optional warnings for the batch, for example truncated field values.
+          items:
+            $ref: '#/components/schemas/ValidationMessageItem'
+      description: Response of a successful customs document upload.
+    CustomsDocumentReference:
+      type: object
+      properties:
+        documentType:
+          type: string
+          example: Invoice
+        filename:
+          type: string
+          example: invoice_2026.pdf
+        userDefinedReference:
+          type: string
+          example: MyFile
+      description: Reference to a single uploaded customs document.
+    CustomsDocumentValidationResponse:
+      type: object
+      properties:
+        items:
+          type: array
+          description: One entry per uploaded document that failed validation.
+          items:
+            $ref: '#/components/schemas/CustomsDocumentValidationItem'
+      description: Response returned when one or more uploaded customs documents failed validation. No batchId is created in this case.
+    CustomsDocumentValidationItem:
+      type: object
+      properties:
+        documentType:
+          type: string
+          example: Invoice
+        validationMessages:
+          type: array
+          items:
+            $ref: '#/components/schemas/ValidationMessageItem'
+      description: Validation result for a single uploaded document.
     RequestStatus:
       type: object
       description: General status description for the attached response or response item.
       required:
         - title
+        - status
       properties:
         title:
           type: string
-          example: ok
         status:           
           description: The status code of the response. Usually, but not necessarliy the HTTP status code.                   
           type: integer           
           format: int32           
-          example: 200
         instance:
           type: string
           description: A URI reference that identifies the specific occurrence of the problem.          
         detail:
           minLength: 0
           type: string
-          example: The Webservice call ran successfully.
     LabelDataResponse:
       type: object
+      description: Response containing the overall request status and shipment results.
       properties:
         status:
           $ref: '#/components/schemas/RequestStatus'
@@ -659,14 +886,15 @@ components:
           type: array
           description: If the request contains a multi element array (e.g. multiple shipments), then the order of the items in the response corresponds to the order of the items in the request. For consistency, if the request contains only one item then the response contains a single element array.
           example:
-            - shipmentNo: 340434310428091700
+            - shipmentNo: '340434310428091700'
               routingCode: 40327653113+99000943058020
               sstatus:
                 title: OK
+                statusCode: 200
                 status: 200
               label:
-                url: https://api-dev.dhl.com/parcel/de/shipping/v1-feature-order-endpoint/labels?token=x5xzrHE7ctmqPqk33k%2BKkBwbvIfYP4elMQsBFM%2BJOdiT2bmoaXXzris%2Ftz9jBtdVFLY5cCENit0Jnd9aXuxoNEXhP9PQ8tAVdPeXD26RZ6JZqF5NCJlrihrAv1%2FAOzuDPqWJLRVaRq461BpT4bcbzChAAHVg%2FHUaQAkeIkaZ8NqfcxWEQzK1AYJWczpy6sv6
-                format: PDF
+                url: https://api-eu.dhl.com/parcel/de/shipping/v2/labels?token=x5xzrHE7ctmqPqk33%2BKkBwbvIfYP4elMQsBFM%2BJOdiT2bmoaXXzris
+                fileFormat: PDF
               validationMessages: []
               uuid: 019e01f5-c97c-7386-88c6-8e9fee5037e9
           items:
@@ -718,17 +946,6 @@ components:
           format: uuid
           description: UUID identifying the shipment
       description: Response for a single shipment containing status, numbers and labels
-      example:
-        - shipmentNo: 340434310428091700
-          routingCode: 40327653113+99000943058020
-          sstatus:
-            title: OK
-            status: 200
-          label:
-            url: https://api-dev.dhl.com/parcel/de/shipping/v1-feature-order-endpoint/labels?token=x5xzrHE7ctmqPqk33k%2BKkBwbvIfYP4elMQsBFM%2BJOdiT2bmoaXXzris%2Ftz9jBtdVFLY5cCENit0Jnd9aXuxoNEXhP9PQ8tAVdPeXD26RZ6JZqF5NCJlrihrAv1%2FAOzuDPqWJLRVaRq461BpT4bcbzChAAHVg%2FHUaQAkeIkaZ8NqfcxWEQzK1AYJWczpy6sv6
-            format: PDF
-          validationMessages: []
-          uuid: 019e01f5-c97c-7386-88c6-8e9fee5037e9
     ValidationMessageItem:
       type: object
       properties:
@@ -747,6 +964,7 @@ components:
       description: Representation of a validation message of a shipment container containing the most important information.
     SingleManifestResponse:
       type: object
+      description: Response containing the daily manifest document and sheet mappings.
       properties:
         status:
           $ref: '#/components/schemas/RequestStatus'
@@ -814,6 +1032,7 @@ components:
           maxLength: 35
           minLength: 0
           type: string
+          example: STANDARD_GRUPPENPROFIL
         shipmentNumbers:
           maxItems: 30
           minItems: 1
@@ -885,13 +1104,16 @@ components:
         Commodity line item (e.g. a t-shirt) for international shipments which require individual listing of goods. Each good must contain a description of the item, the amount of the item, the net weight of one single item and the value of one single item. If you ship 5 t-shirts, you need to include the weight and value of one single shirt. The correct final weight and value will be calculated automatically.
         The HS Code and the country of origin are optional.
       example:
-        - itemDescription: T-Shirt
-          hscode: '61099090'
-          countryOfOrigin: DE
-          packagedQuantity: 3
-        - itemDescription: Book
-          hscode: '49019900'
-          packagedQuantity: 1
+        itemDescription: T-Shirt
+        hsCode: '61099090'
+        countryOfOrigin: DEU
+        packagedQuantity: 3
+        itemValue:
+          currency: EUR
+          value: 10
+        itemWeight:
+          uom: kg
+          value: 0.3
     Consignee:
       type: object
       description: Consignee address information. Either a doorstep address (contact address) including contact information or a droppoint address. One of packstation (parcel locker), or post office (postfiliale/retail shop).
@@ -1073,14 +1295,23 @@ components:
           description: Commodity types in that package
           example:
             - itemDescription: T-Shirt
-              hscode: '61099090'
-              countryOfOrigin: DE
+              hsCode: '61099090'
+              countryOfOrigin: DEU
               packagedQuantity: 3
-            - itemDescription: Book
-              hscode: '49019900'
-              packagedQuantity: 1
+              itemValue:
+                currency: EUR
+                value: 10
+              itemWeight:
+                uom: kg
+                value: 0.3
           items:
             $ref: '#/components/schemas/Commodity'
+        invoiceUsCustoms:
+          type: string
+          description: Batch ID of a previously uploaded US customs invoice. Required for shipments to the USA.
+          example: 123e4567-e89b-12d3-a456-426614174000
+          maxLength: 36
+          minLength: 0
       description: For international shipments, this section contains information necessary for customs about the exported goods. ExportDocument can contain one or more positions as child element. This data is also transferred as electronic declaration to customs. The custom details are mandatory depending on whether the parcel will go to a country outside the European Customs Union. For DHL Parcel International (V53WPAK) CN23 will returned as a separate document, while for Warenpost International the customs information will be printed onto the shipment label (CN22).
     Dimensions:
       required:
@@ -1326,6 +1557,7 @@ components:
           maxLength: 35
           minLength: 0
           type: string
+          example: STANDARD_GRUPPENPROFIL
         shipments:
           maxItems: 30
           minItems: 1
@@ -1494,6 +1726,11 @@ components:
           type: boolean
           description: 'All import duties are paid by the shipper.'
           example: true
+        paperlessCustoms:
+          type: string
+          format: uuid
+          description: 'batchId (see POST /customs-documents) referencing a previously uploaded set of customs documents for this shipment, enabling paperless customs clearance instead of physically attaching customs documents (e.g. CN23) to the parcel. A batchId can only be used for one shipment; reusing an already consumed batchId results in an error.'
+          example: 45685f64-1234-1234-b3fc-2c963f66a123
       description: Value added services. Please note that services are specific to products and geographies and/or may require individual setup and billing numbers. Please test and contact your account representative in case of questions.
     VASCashOnDelivery:
       required:
@@ -2049,7 +2286,6 @@ components:
               city: Bonn
               country: DEU
               email: max@mustermann.de
-              phone: +49 123456789
           consignee:
               name1: Maria Musterfrau
               addressStreet: Kurt-Schumacher-Str. 20
@@ -2057,7 +2293,6 @@ components:
               city: Bonn
               country: DEU
               email: maria@musterfrau.de
-              phone: +49 987654321
           details:
               dim:
                 uom: mm
@@ -2083,7 +2318,6 @@ components:
               city: Bonn
               country: DEU
               email: max@mustermann.de
-              phone: +49 123456789
           consignee:
               name1: Jan Vermeer
               addressStreet: Museumstraat
@@ -2103,6 +2337,8 @@ components:
               weight:
                 uom: g
                 value: 500
+          services:
+              endorsement: RETURN
     DHLPaketInternationalWithCustoms:
       summary: DHL Paket International (V53WPAK) with customs
       description: Order example for DHL Paket International (V53WPAK) with customs
@@ -2119,7 +2355,6 @@ components:
               city: Bonn
               country: DEU
               email: max@mustermann.de
-              phone: +49 123456789
           consignee:
               name1: Joe Black
               addressStreet: 10 Downing Street
@@ -2146,7 +2381,7 @@ components:
             items:
             - itemDescription: Red T-Shirt
               packagedQuantity: 1
-              hsCode: "123456"
+              hsCode: "61099090"
               countryOfOrigin: FRA
               itemValue:
                 currency: EUR
@@ -2172,7 +2407,6 @@ components:
                 city: Bonn
                 country: DEU
                 email: max@mustermann.de
-                phone: +49 123456789
               consignee:
                 name1: Maria Musterfrau
                 addressStreet: Kurt-Schumacher-Str. 20
@@ -2180,7 +2414,6 @@ components:
                 city: Bonn
                 country: DEU
                 email: maria@musterfrau.de
-                phone: +49 987654321
               details:
                 dim:
                   uom: cm
@@ -2206,7 +2439,6 @@ components:
                 city: Bonn
                 country: DEU
                 email: max@mustermann.de
-                phone: "+49 123456789"
               consignee:
                 name1: Joe Black
                 addressStreet: 42 Street
@@ -2233,7 +2465,7 @@ components:
                 items:
                 - itemDescription: Item 1
                   packagedQuantity: 1
-                  hsCode: 123456
+                  hsCode: '61099090'
                   countryOfOrigin: FRA
                   itemValue:
                     currency: EUR
@@ -2243,11 +2475,284 @@ components:
                     value: 300
               services:
                 endorsement: RETURN
+    DHLPaketPackstation:
+      summary: DHL Paket (V01PAK) to a Packstation
+      description: Order example for DHL Paket (V01PAK) delivered to a Packstation. The consignee is identified by name, Postnummer (postNumber) and Packstation number (lockerID). Only German Packstations can be addressed directly.
+      value:
+        profile: STANDARD_GRUPPENPROFIL
+        shipments:
+          - product: V01PAK
+            billingNumber: "33333333330102"
+            refNo: Order No. 1234
+            shipper:
+              name1: My Online Shop GmbH
+              addressStreet: Sträßchensweg 10
+              postalCode: "53113"
+              city: Bonn
+              country: DEU
+              email: max@mustermann.de
+            consignee:
+              name: Maria Musterfrau
+              lockerID: 105
+              postNumber: "12345678"
+              postalCode: "53111"
+              city: Bonn
+              country: DEU
+            details:
+              dim:
+                uom: mm
+                height: 100
+                length: 200
+                width: 150
+              weight:
+                uom: g
+                value: 500
+    DHLPaketPostOffice:
+      summary: DHL Paket (V01PAK) to a post office or retail outlet
+      description: Order example for DHL Paket (V01PAK) delivered to a post office or retail outlet (Paketshop). Either the Postnummer (postNumber) or the e-mail address of the consignee is required. Only German post offices and retail outlets can be addressed directly.
+      value:
+        profile: STANDARD_GRUPPENPROFIL
+        shipments:
+          - product: V01PAK
+            billingNumber: "33333333330102"
+            refNo: Order No. 1234
+            shipper:
+              name1: My Online Shop GmbH
+              addressStreet: Sträßchensweg 10
+              postalCode: "53113"
+              city: Bonn
+              country: DEU
+              email: max@mustermann.de
+            consignee:
+              name: Maria Musterfrau
+              retailID: 502
+              postNumber: "12345678"
+              postalCode: "53113"
+              city: Bonn
+              country: DEU
+            details:
+              dim:
+                uom: mm
+                height: 100
+                length: 200
+                width: 150
+              weight:
+                uom: g
+                value: 500
+    DHLPaketWithReturnLabel:
+      summary: DHL Paket (V01PAK) with return label
+      description: Order example for DHL Paket (V01PAK) with an additional return label (dhlRetoure). The return label requires the return billing number and a return address. Weight and dimensions do not need to be specified for the return.
+      value:
+        profile: STANDARD_GRUPPENPROFIL
+        shipments:
+          - product: V01PAK
+            billingNumber: "33333333330102"
+            refNo: Order No. 1234
+            shipper:
+              name1: My Online Shop GmbH
+              addressStreet: Sträßchensweg 10
+              postalCode: "53113"
+              city: Bonn
+              country: DEU
+              email: max@mustermann.de
+            consignee:
+              name1: Maria Musterfrau
+              addressStreet: Kurt-Schumacher-Str. 20
+              postalCode: "53113"
+              city: Bonn
+              country: DEU
+              email: maria@musterfrau.de
+            details:
+              dim:
+                uom: mm
+                height: 100
+                length: 200
+                width: 150
+              weight:
+                uom: g
+                value: 500
+            services:
+              dhlRetoure:
+                billingNumber: "33333333330702"
+                refNo: Return Order No. 1234
+                returnAddress:
+                  name1: My Online Shop GmbH
+                  name2: Retourenlager
+                  addressStreet: Frankenstraße 298
+                  postalCode: "45133"
+                  city: Essen
+                  country: DEU
+    DHLPaketInternationalUSA:
+      summary: DHL Paket International (V53WPAK) to the USA
+      description: |-
+        Order example for DHL Paket International (V53WPAK) to the USA. Upload the commercial invoice first via `POST /customs-documents` and pass the returned `batchId` as `customs.invoiceUsCustoms`. The consignee state is mandatory. The postal delivery duty paid service (`postalDeliveryDutyPaid`) is required, and the HS code must have 8 or 10 digits.
+      value:
+        profile: STANDARD_GRUPPENPROFIL
+        shipments:
+          - product: V53WPAK
+            billingNumber: "33333333335301"
+            refNo: Order No. 1234
+            shipper:
+              name1: My Online Shop GmbH
+              addressStreet: Sträßchensweg 10
+              postalCode: "53113"
+              city: Bonn
+              country: DEU
+              email: max@mustermann.de
+            consignee:
+              name1: John Doe
+              addressStreet: 2323 Farm to Market 969
+              state: US-TX
+              postalCode: "78621"
+              city: Elgin
+              country: USA
+              email: john@doe.com
+              phone: +1 5125551234
+            details:
+              dim:
+                uom: mm
+                height: 100
+                length: 200
+                width: 150
+              weight:
+                uom: g
+                value: 500
+            customs:
+              exportType: COMMERCIAL_GOODS
+              invoiceUsCustoms: 45685f64-1234-1234-b3fc-2c963f66a123
+              postalCharges:
+                currency: EUR
+                value: 1
+              items:
+                - itemDescription: Red T-Shirt
+                  packagedQuantity: 1
+                  hsCode: "61099090"
+                  countryOfOrigin: FRA
+                  itemValue:
+                    currency: EUR
+                    value: 200
+                  itemWeight:
+                    uom: g
+                    value: 400
+            services:
+              postalDeliveryDutyPaid: true
+              endorsement: RETURN
+    DHLPaketInternationalPaperlessCustoms:
+      summary: DHL Paket International (V53WPAK) with paperless customs
+      description: |-
+        Order example for DHL Paket International (V53WPAK) with paperless customs clearance (pilot, currently Switzerland only). Upload the commercial invoice first via `POST /customs-documents` and pass the returned `batchId` as `services.paperlessCustoms`. A `batchId` can only be used for one shipment. Paperless customs cannot be combined with `bulkyGoods` or `postalDeliveryDutyPaid`.
+      value:
+        profile: STANDARD_GRUPPENPROFIL
+        shipments:
+          - product: V53WPAK
+            billingNumber: "33333333335301"
+            refNo: Order No. 1234
+            shipper:
+              name1: My Online Shop GmbH
+              addressStreet: Sträßchensweg 10
+              postalCode: "53113"
+              city: Bonn
+              country: DEU
+              email: max@mustermann.de
+            consignee:
+              name1: Joe Black
+              addressStreet: Bundesplatz 1
+              postalCode: "3003"
+              city: Bern
+              country: CHE
+              email: joe@black.ch
+              phone: +41 311234567
+            details:
+              dim:
+                uom: mm
+                height: 100
+                length: 200
+                width: 150
+              weight:
+                uom: g
+                value: 500
+            customs:
+              exportType: COMMERCIAL_GOODS
+              postalCharges:
+                currency: EUR
+                value: 1
+              items:
+                - itemDescription: Red T-Shirt
+                  packagedQuantity: 1
+                  hsCode: "61099090"
+                  countryOfOrigin: FRA
+                  itemValue:
+                    currency: EUR
+                    value: 160
+                  itemWeight:
+                    uom: g
+                    value: 400
+            services:
+              paperlessCustoms: 45685f64-1234-1234-b3fc-2c963f66a123
+              endorsement: RETURN
+    MultipleShipments:
+      summary: Multiple shipments with mixed products in one request
+      description: Order example with two shipments of different products (V01PAK and V62KP) in a single request. Up to 30 shipments are allowed per request. The response is always HTTP 207 (multi-status) with one status per shipment, even if all shipments succeed.
+      value:
+        profile: STANDARD_GRUPPENPROFIL
+        shipments:
+          - product: V01PAK
+            billingNumber: "33333333330102"
+            refNo: Order No. 1234
+            shipper:
+              name1: My Online Shop GmbH
+              addressStreet: Sträßchensweg 10
+              postalCode: "53113"
+              city: Bonn
+              country: DEU
+              email: max@mustermann.de
+            consignee:
+              name1: Maria Musterfrau
+              addressStreet: Kurt-Schumacher-Str. 20
+              postalCode: "53113"
+              city: Bonn
+              country: DEU
+              email: maria@musterfrau.de
+            details:
+              dim:
+                uom: mm
+                height: 100
+                length: 200
+                width: 150
+              weight:
+                uom: g
+                value: 500
+          - product: V62KP
+            billingNumber: "33333333336201"
+            refNo: Order No. 1235
+            shipper:
+              name1: My Online Shop GmbH
+              addressStreet: Sträßchensweg 10
+              postalCode: "53113"
+              city: Bonn
+              country: DEU
+              email: max@mustermann.de
+            consignee:
+              name1: Moritz Mustermensch
+              addressStreet: Kurt-Schumacher-Str. 20
+              postalCode: "53113"
+              city: Bonn
+              country: DEU
+              email: moritz@mustermensch.de
+            details:
+              dim:
+                uom: cm
+                height: 1
+                length: 10
+                width: 15
+              weight:
+                uom: g
+                value: 500
   securitySchemes:
     BasicAuth:
       type: http
       scheme: basic
-      description: Credentials provided here are username and password  of the partner system.
+      description: Deprecated. Do not use. Will be removed in the next major version. Credentials provided here are username and password of the partner system.
     ApiKey:
       type: apiKey
       description: API key to authorize requests. API key can be obtained at [DHL's development
@@ -2267,31 +2772,109 @@ components:
         content:
           application/problem+json:
             schema:
-              $ref: '#/components/schemas/LabelDataResponse'            
+              $ref: '#/components/schemas/RequestStatus'
+            examples:
+              invalidRequest:
+                summary: Request rejected
+                value:
+                  title: Bad Request
+                  statusCode: 400
+                  status: 400
+                  detail: The request could not be processed.
+      ShipmentBadRequest:
+        description: Shipment request failed validation
+        content:
+          application/problem+json:
+            schema:
+              $ref: '#/components/schemas/LabelDataResponse'
+            examples:
+              invalidShipment:
+                summary: Shipment validation failed
+                value:
+                  status:
+                    title: Bad Request
+                    statusCode: 400
+                    status: 400
+                    detail: One or more shipment fields failed validation.
+                  items:
+                    - sstatus:
+                        title: Bad Request
+                        statusCode: 400
+                        status: 400
+                      validationMessages:
+                        - property: customs.items[0].hsCode
+                          validationMessage: The customs tariff number is invalid.
+                          validationState: Error
+      ContentTooLarge:
+        description: Content Too Large
+        content:
+          application/problem+json:
+            schema:
+              $ref: '#/components/schemas/RequestStatus'
+            examples:
+              contentTooLarge:
+                summary: Request body exceeds the accepted size
+                value:
+                  title: Content Too Large
+                  statusCode: 413
+                  status: 413
+                  detail: The request exceeds the maximum allowed size.
       Unauthorized:        
         description: Unauthorized        
         content:
           application/problem+json:
             schema:
               $ref: '#/components/schemas/RequestStatus'
+            examples:
+              unauthorized:
+                summary: Authentication failed
+                value:
+                  title: Unauthorized
+                  statusCode: 401
+                  status: 401
+                  detail: Authentication is required or the supplied credentials are invalid.
       NotFound:        
         description: Not Found
         content:
           application/problem+json:
             schema:
-              $ref: '#/components/schemas/RequestStatus'                                                 
+              $ref: '#/components/schemas/RequestStatus'
+            examples:
+              notFound:
+                summary: Requested resource was not found
+                value:
+                  title: Not Found
+                  statusCode: 404
+                  status: 404
+                  detail: The requested resource was not found.
       TooManyRequests:
         description: Too Many Requests
         content:
           application/problem+json:
             schema:
               $ref: '#/components/schemas/RequestStatus'
+            examples:
+              tooManyRequests:
+                summary: Request rate limit exceeded
+                value:
+                  title: Too Many Requests
+                  statusCode: 429
+                  status: 429
+                  detail: The request rate limit has been exceeded.
       InternalServerError:
         description: Internal Server Error
         content:
           application/problem+json:
             schema:
               $ref: '#/components/schemas/RequestStatus'
+            examples:
+              internalServerError:
+                summary: Unexpected server error
+                value:
+                  title: Internal Server Error
+                  statusCode: 500
+                  status: 500
+                  detail: An unexpected error occurred.
 security:
     - ApiKey: []
     - BasicAuth: []

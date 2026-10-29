@@ -23,5 +23,6 @@ Name | Type | Description | Notes
 **go_green_plus** | **bool** | GoGreen Plus enables sustainable shipping by investing in measures to reduce greenhouse gas emissions at DHL. | [optional]
 **dhl_retoure** | [**\Dhl\Rest\Shipping\Model\VASDhlRetoure**](VASDhlRetoure.md) |  | [optional]
 **postal_delivery_duty_paid** | **bool** | All import duties are paid by the shipper. | [optional]
+**paperless_customs** | **string** | batchId (see POST /customs-documents) referencing a previously uploaded set of customs documents for this shipment, enabling paperless customs clearance instead of physically attaching customs documents (e.g. CN23) to the parcel. A batchId can only be used for one shipment; reusing an already consumed batchId results in an error. | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

@@ -17,5 +17,6 @@ Name | Type | Description | Notes
 **shipper_customs_ref** | **string** | Optional. The customs reference is used by customs authorities to identify economics operators an/or other persons involved. With the given reference, granted authorizations and/or relevant processes in customs clearance an/or taxation can be taken into account. Aka Zoll-Nummer or EORI-Number but dependent on destination. | [optional]
 **consignee_customs_ref** | **string** | Optional. The customs reference is used by customs authorities to identify economics operators an/or other persons involved. With the given reference, granted authorizations and/or relevant processes in customs clearance an/or taxation can be taken into account. Aka Zoll-Nummer or EORI-Number but dependent on destination. | [optional]
 **items** | [**\Dhl\Rest\Shipping\Model\Commodity[]**](Commodity.md) | Commodity types in that package |
+**invoice_us_customs** | **string** | Batch ID of a previously uploaded US customs invoice. Required for shipments to the USA. | [optional]
 
 [[Back to Model list]](../../README.md#models) [[Back to API list]](../../README.md#endpoints) [[Back to README]](../../README.md)

@@ -280,7 +280,7 @@ $apiInstance = new Dhl\Rest\Shipping\Api\ShipmentsAndLabelsApi(
     $config
 );
 $profile = STANDARD_GRUPPENPROFIL; // string | Defines the user group profile. A user group is permitted to specific billing numbers. Shipments are only canceled if they belong to a billing number that the user group profile is entitled to use. This attribute is mandatory. Please use the standard user group profile 'STANDARD_GRUPPENPROFIL' if no dedicated user group profile is available.
-$shipment = 123456789; // string | Shipment number that shall be canceled. If multiple shipments shall be canceled, the parameter must be added multiple times. Up to 30 shipments can be canceled at once.
+$shipment = 0034043333301020028792443; // string | Shipment number that shall be canceled. If multiple shipments shall be canceled, the parameter must be added multiple times. Up to 30 shipments can be canceled at once.
 $accept_language = de-DE; // string | Control the APIs response language via locale abbreviation. English (en-US) and german (de-DE) are supported. If not specified, the default is english.
 
 try {
