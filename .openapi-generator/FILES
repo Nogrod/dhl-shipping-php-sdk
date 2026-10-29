@@ -105,9 +105,3 @@ src/Model/ValidationMessageItem.php
 src/Model/Value.php
 src/Model/Weight.php
 src/ObjectSerializer.php
-tests/Api/CustomsDocumentsApiTest.php
-tests/Model/CustomsDocumentBatchResponseTest.php
-tests/Model/CustomsDocumentReferenceTest.php
-tests/Model/CustomsDocumentUploadItemTest.php
-tests/Model/CustomsDocumentValidationItemTest.php
-tests/Model/CustomsDocumentValidationResponseTest.php

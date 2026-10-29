@@ -1548,7 +1548,7 @@ class ShipmentsAndLabelsApi
                     );
                 case 400:
                     return $this->handleResponseWithDataType(
-                        '\Dhl\Rest\Shipping\Model\RequestStatus',
+                        '\Dhl\Rest\Shipping\Model\LabelDataResponse',
                         $request,
                         $response,
                     );
@@ -1611,7 +1611,7 @@ class ShipmentsAndLabelsApi
                 case 400:
                     $data = ObjectSerializer::deserialize(
                         $e->getResponseBody(),
-                        '\Dhl\Rest\Shipping\Model\RequestStatus',
+                        '\Dhl\Rest\Shipping\Model\LabelDataResponse',
                         $e->getResponseHeaders()
                     );
                     $e->setResponseObject($data);

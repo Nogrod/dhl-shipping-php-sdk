@@ -686,7 +686,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/LabelDataResponse'
         '400':
-            $ref: '#/components/responses/BadRequest'
+            $ref: '#/components/responses/ShipmentBadRequest'
         '401':
             $ref: '#/components/responses/Unauthorized'
         '429':
